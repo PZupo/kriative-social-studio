@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kriative Social Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+  :root{
+    --bg:#ffffff; --fg:#111827; --muted:#6b7280; --card:#f9fafb; --border:#e5e7eb;
+    --grad: linear-gradient(135deg,#2563eb,#ef4444);
+    --btn-bg:#ffffff; --btn-fg:#111827;
+  }
+  html[data-theme="dark"]{
+    --bg:#0b0f19; --fg:#e5e7eb; --muted:#94a3b8; --card:#0f1629; --border:#1f2937;
+    --btn-bg:#111827; --btn-fg:#e5e7eb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font-family:Poppins,system-ui,Arial; background:var(--bg); color:var(--fg);}
+  .tag{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:8px;font-size:12px}
+  .btn{padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:var(--btn-bg);color:var(--btn-fg);cursor:pointer}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .btn--primary{border-color:#60a5fa}
+  .chip{padding:6px 10px;border:1px solid var(--border);border-radius:999px;font-size:12px}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+  .gradText{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill, minmax(280px,1fr))}
+  .frame{border:1px solid var(--border); border-radius:12px; overflow:hidden}
+</style>
+
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "vite": "https://aistudiocdn.com/vite@^7.1.12",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.4",
+    "fs": "https://aistudiocdn.com/fs@^0.0.1-security",
+    "jszip": "https://aistudiocdn.com/jszip@^3.10.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
