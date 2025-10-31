@@ -1,13 +1,79 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kriative Social Studio</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kriative Social Studio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; }
+    
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      z-index: 50;
+      height: 64px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
+    .logo { display: flex; align-items: center; gap: 0.5rem; font-weight: bold; font-size: 1.25rem; }
+    .logo-icon { width: 32px; height: 32px; background: linear-gradient(to right, #9333ea, #ec4899); border-radius: 8px; }
+    nav { display: none; }
+    @media (min-width: 768px) { nav { display: flex; gap: 2rem; } }
+    nav a { color: #374151; text-decoration: none; font-weight: 500; }
+    nav a:hover { color: #111; }
+    .right { display: flex; align-items: center; gap: 1rem; }
+    select { padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem; }
+    .profile { width: 32px; height: 32px; background: #d1d5db; border-radius: 50%; }
+
+    main { padding-top: 80px; min-height: 100vh; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER FIXO -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon"></div>
+          <span>Social Studio</span>
+        </div>
+        <nav>
+          <a href="/">Dashboard</a>
+          <a href="/planos">Planos</a>
+        </nav>
+        <div class="right">
+          <select>
+            <option>PT-BR</option>
+            <option>EN</option>
+            <option>ES</option>
+          </select>
+          <button class="profile"></button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO ORIGINAL -->
+  <main>
+    <!-- Cole aqui TODO o conteúdo original do seu <body> -->
+    <!-- Exemplo: -->
+    <div class="container">
+      <h1>Bem-vindo ao Kriative Social Studio</h1>
+      <p>Seu app continua aqui embaixo, com padding-top: 80px.</p>
+    </div>
+  </main>
+
+</body>
 </html>
