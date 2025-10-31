@@ -1,4 +1,3 @@
-// src/components/KriativeHeader.tsx
 import { useState } from 'react';
 
 const languages = [
@@ -15,10 +14,9 @@ export default function KriativeHeader({ appName }: { appName: string }) {
   const [currentLang, setCurrentLang] = useState(languages[1]);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[9999] bg-white dark:bg-[#1A1A1A] border-b border-[#E5E5E5] dark:border-[#404040] shadow-lg">
+    <header className="fixed top-0 left-0 right-0 z-[9999] bg-white dark:bg-[#1A1A1A] border-b border-[#E5E5E5] dark:border-[#404040] shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          {/* Logo */}
           <div className="flex items-center">
             <div className="w-8 h-8 bg-gradient-to-r from-[#008080] to-[#FF8C00] rounded-lg"></div>
             <span className="ml-3 text-xl font-bold text-[#333333] dark:text-white">
@@ -26,7 +24,6 @@ export default function KriativeHeader({ appName }: { appName: string }) {
             </span>
           </div>
 
-          {/* Links */}
           <nav className="hidden md:flex items-center space-x-8">
             <a href="https://hub.kriative.app" className="text-[#333333] dark:text-white hover:text-[#008080] font-medium">
               Dashboard
@@ -36,9 +33,7 @@ export default function KriativeHeader({ appName }: { appName: string }) {
             </a>
           </nav>
 
-          {/* Idioma + Perfil */}
           <div className="flex items-center space-x-3">
-            {/* Dropdown Idioma */}
             <div className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
@@ -69,7 +64,6 @@ export default function KriativeHeader({ appName }: { appName: string }) {
               )}
             </div>
 
-            {/* Perfil */}
             <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#2A2A2A]">
               <svg className="w-5 h-5 text-[#333333] dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -77,14 +71,12 @@ export default function KriativeHeader({ appName }: { appName: string }) {
             </button>
           </div>
 
-          {/* Mobile */}
           <button onClick={() => setOpen(!open)} className="md:hidden p-2">
-            {open ? 'Close' : 'Menu'}
+            {open ? 'X' : 'Menu'}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {open && (
         <div className="md:hidden bg-white dark:bg-[#1A1A1A] border-t dark:border-[#404040] pb-3">
           <div className="px-4 pt-2 space-y-1">
@@ -105,6 +97,6 @@ export default function KriativeHeader({ appName }: { appName: string }) {
           </div>
         </div>
       )}
-    </div>
+    </header>
   );
 }
