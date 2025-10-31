@@ -6,7 +6,7 @@
     <title>Kriative Social Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CDN (100% funcional) -->
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -84,13 +84,24 @@
       </div>
     </header>
 
-    <!-- PADDING -->
+    <!-- PADDING + ROOT -->
     <div style="padding-top: 80px;">
       <div id="root"></div>
     </div>
 
-    <!-- SCRIPT DO APP -->
-    <script type="module" src="/src/index.tsx"></script>
+    <!-- ENTRY POINT CORRETO -->
+    <script type="module">
+      import React from 'react'
+      import ReactDOM from 'react-dom/client'
+      import App from './src/App.tsx'
+      import './src/index.css'
+
+      ReactDOM.createRoot(document.getElementById('root')!).render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      )
+    </script>
 
     <!-- JS DO HEADER -->
     <script>
