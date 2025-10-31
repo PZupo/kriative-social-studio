@@ -27,6 +27,10 @@
       .gradText{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
       .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill, minmax(280px,1fr))}
       .frame{border:1px solid var(--border); border-radius:12px; overflow:hidden}
+      /* HEADER FIXO */
+      #kriative-header { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: white; border-bottom: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+      .dark #kriative-header { background: #1A1A1A; border-bottom: 1px solid #404040; }
+      #root { padding-top: 80px; }
     </style>
     <script type="importmap">
     {
@@ -41,7 +45,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="/src/index.css">
   </head>
   <body>
     <div id="root"></div>
