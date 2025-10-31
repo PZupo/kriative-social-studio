@@ -1,71 +1,13 @@
 <!doctype html>
-<html lang="pt-BR" data-theme="light">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kriative Social Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = { darkMode: 'class' }
-    </script>
-
-    <!-- CSS ORIGINAL -->
-    <style>
-      :root{--bg:#ffffff;--fg:#111827;--muted:#6b7280;--card:#f9fafb;--border:#e5e7eb;--grad:linear-gradient(135deg,#2563eb,#ef4444);}
-      html[data-theme="dark"]{--bg:#0b0f19;--fg:#e5e7eb;--muted:#94a3b8;--card:#0f1629;--border:#1f2937;}
-      *{box-sizing:border-box}
-      body{margin:0;font-family:Poppins,system-ui,Arial;background:var(--bg);color:var(--fg);}
-      .chip{padding:6px 10px;border:1px solid var(--border);border-radius:999px;font-size:12px}
-      .row{display:flex;gap:8px;flex-wrap:wrap}
-      .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
-      .gradText{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-      .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
-    </style>
-
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://aistudiocdn.com/react@^19.2.0",
-        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
-      }
-    }
-    </script>
   </head>
   <body>
-    <!-- HEADER FIXO (INLINE) -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-      <div class="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-          <div class="w-8 h-8 bg-gradient-to-r from-teal-500 to-orange-500 rounded-lg"></div>
-          <span class="text-xl font-bold">Social Studio</span>
-        </div>
-        <nav class="hidden md:flex space-x-6">
-          <a href="https://hub.kriative.app" class="font-medium hover:text-teal-600">Dashboard</a>
-          <a href="/pricing" class="font-medium hover:text-teal-600">Planos</a>
-        </nav>
-        <div class="flex items-center space-x-3">
-          <select class="px-3 py-1 text-sm rounded-lg bg-gray-100 dark:bg-gray-800">
-            <option>PT-BR</option>
-            <option>EN</option>
-          </select>
-          <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- PADDING + APP -->
-    <div style="padding-top: 80px;">
-      <div id="root"></div>
-    </div>
-
-    <!-- APP -->
-    <script type="module" src="/src/index.tsx"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
