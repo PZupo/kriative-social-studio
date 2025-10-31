@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// IMPORT DIRETO (sem path relativo)
 import KriativeHeader from './components/KriativeHeader';
 import ThemeToggle from './components/ThemeToggle';
 import Stepper from './components/Stepper';
@@ -55,10 +56,10 @@ export default function App() {
         meta: { preset, style, idea, text, plan, seed: seeds[idx], type }
       });
       console.log('Criação salva:', id);
-      alert('Salvo em “Minhas Criações”.');
+      alert('Salvo em "Minhas Criações".');
     } catch (err: any) {
       const msg = (err && err.name === 'SecurityError')
-        ? 'Não foi possível salvar porque a imagem base é externa sem permissões (CORS). Use o botão “Enviar imagem” (upload do seu dispositivo) ou gere sem imagem base.'
+        ? 'Não foi possível salvar porque a imagem base é externa sem permissões (CORS). Use o botão "Enviar imagem" ou gere sem imagem base.'
         : 'Falha ao salvar esta criação.';
       console.error(err);
       alert(msg);
@@ -67,13 +68,13 @@ export default function App() {
 
   return (
     <>
-      {/* HEADER PADRÃO (FIXO NO TOPO) */}
+      {/* HEADER NOVO (GARANTIDO NO TOPO) */}
       <KriativeHeader appName="Social Studio" />
-
+      
       {/* PADDING PRA NÃO SOBREPOR */}
       <div style={{ paddingTop: '80px' }}>
         <main style={shell}>
-          {/* HEADER ORIGINAL (mantido 100%) */}
+          {/* HEADER ORIGINAL (MANTIDO) */}
           <header style={header}>
             <h1 style={h1}>
               <span className="gradText">Kriative Social Studio</span> — Online
@@ -83,7 +84,7 @@ export default function App() {
             </div>
           </header>
 
-          {/* Tags */}
+          {/* RESTO DO CONTEÚDO (100% INTACTO) */}
           <section className="row" style={{ marginBottom: 12 }}>
             {pill('Vite + React + TS')}
             {pill('Fluxo: Ideia → Texto → Visual')}
@@ -92,10 +93,8 @@ export default function App() {
             {pill('PNG/JPEG/ZIP')}
           </section>
 
-          {/* Stepper */}
           <Stepper step={step} onStep={setStep} />
 
-          {/* Passo 1 — Ideia */}
           {step === 0 && (
             <section className="card" style={{ marginTop: 12 }}>
               <h3 style={{ marginTop: 0 }}>Passo 1 — Ideia</h3>
@@ -108,7 +107,6 @@ export default function App() {
             </section>
           )}
 
-          {/* Passo 2 — Texto + Planner */}
           {step === 1 && (
             <section className="card" style={{ marginTop: 12 }}>
               <h3 style={{ marginTop: 0 }}>Passo 2 — Texto</h3>
@@ -121,7 +119,6 @@ export default function App() {
             </section>
           )}
 
-          {/* Passo 3 — Visual */}
           {step === 2 && (
             <section className="card" style={{ marginTop: 12 }}>
               <h3 style={{ marginTop: 0 }}>Passo 3 — Visual</h3>
