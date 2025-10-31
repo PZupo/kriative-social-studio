@@ -30,7 +30,7 @@
       /* HEADER FIXO */
       #kriative-header { position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: white; border-bottom: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
       .dark #kriative-header { background: #1A1A1A; border-bottom: 1px solid #404040; }
-      #root { padding-top: 80px; }
+      #root { padding-top: 80px !important; }
     </style>
     <script type="importmap">
     {
@@ -45,10 +45,9 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="/src/index.css">
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
