@@ -6,7 +6,7 @@
     <title>Kriative Social Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CDN (garante tudo) -->
+    <!-- Tailwind CDN (100% funcional) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -95,8 +95,7 @@
     <!-- JS DO HEADER -->
     <script>
       document.getElementById('lang-btn').addEventListener('click', () => {
-        const menu = document.getElementById('lang-menu');
-        menu.classList.toggle('hidden');
+        document.getElementById('lang-menu').classList.toggle('hidden');
       });
     </script>
   </body>
