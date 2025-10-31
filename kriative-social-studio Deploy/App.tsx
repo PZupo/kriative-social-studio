@@ -69,6 +69,15 @@ export default function App() {
     <>
       {/* NOVO HEADER PADRÃO (ACIMA DE TUDO) */}
       <KriativeHeader appName="Social Studio" />
+      
+      {/* Adicione padding-top igual à altura do header */}
+    <div style={{ paddingTop: '64px' }}>
+      <main style={shell}>
+        {/* ... todo o conteúdo original ... */}
+      </main>
+    </div>
+  </>
+);
 
       {/* CONTEÚDO ORIGINAL 100% INTACTO */}
       <main style={shell}>
