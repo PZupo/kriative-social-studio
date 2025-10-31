@@ -15,7 +15,7 @@
       }
     </script>
 
-    <!-- CSS ORIGINAL (mantido 100%) -->
+    <!-- CSS ORIGINAL -->
     <style>
       :root{--bg:#ffffff;--fg:#111827;--muted:#6b7280;--card:#f9fafb;--border:#e5e7eb;--grad:linear-gradient(135deg,#2563eb,#ef4444);--btn-bg:#ffffff;--btn-fg:#111827;}
       html[data-theme="dark"]{--bg:#0b0f19;--fg:#e5e7eb;--muted:#94a3b8;--card:#0f1629;--border:#1f2937;--btn-bg:#111827;--btn-fg:#e5e7eb;}
@@ -48,25 +48,24 @@
     </script>
   </head>
   <body>
-    <!-- HEADER SERÁ CARREGADO AQUI -->
+    <!-- HEADER -->
     <div id="kriative-header"></div>
 
-    <!-- SEU APP ORIGINAL -->
+    <!-- APP -->
     <div id="root"></div>
 
-    <!-- CARREGA O HEADER -->
+    <!-- CARREGA HEADER -->
     <script>
       fetch('/kriative-header.html')
         .then(r => r.text())
         .then(html => {
           document.getElementById('kriative-header').innerHTML = html;
-          // Garante padding
           document.getElementById('root').style.paddingTop = '80px';
         })
-        .catch(() => console.log('Header não carregado (offline)'));
+        .catch(() => {});
     </script>
 
-    <!-- SEU APP (100% INTACTO) -->
+    <!-- APP ORIGINAL -->
     <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
