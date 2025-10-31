@@ -8,7 +8,8 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: system-ui, sans-serif; }
-    
+
+    /* HEADER FIXO */
     header {
       position: fixed;
       top: 0;
@@ -36,6 +37,7 @@
     select { padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem; }
     .profile { width: 32px; height: 32px; background: #d1d5db; border-radius: 50%; }
 
+    /* PADDING PARA O CONTEÚDO */
     main { padding-top: 80px; min-height: 100vh; }
   </style>
 </head>
@@ -65,13 +67,17 @@
     </div>
   </header>
 
-  <!-- CONTEÚDO ORIGINAL -->
+  <!-- SEU APP ORIGINAL AQUI -->
   <main>
-    <!-- Cole aqui TODO o conteúdo original do seu <body> -->
-    <!-- Exemplo: -->
     <div class="container">
+      <!-- COLE AQUI TODO O CONTEÚDO DO SEU APP ORIGINAL -->
+      <!-- Exemplo do que você tinha antes: -->
       <h1>Bem-vindo ao Kriative Social Studio</h1>
       <p>Seu app continua aqui embaixo, com padding-top: 80px.</p>
+
+      <!-- Se o app for React, mantenha o <div id="root"> -->
+      <div id="root"></div>
+      <script type="module" src="/main.js"></script>
     </div>
   </main>
 
