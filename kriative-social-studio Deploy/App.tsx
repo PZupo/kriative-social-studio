@@ -11,6 +11,7 @@ import ExportPanel from './components/ExportPanel';
 import ImageUpload from './components/ImageUpload';
 import Planner from './components/Planner';
 import MyCreations from './components/MyCreations';
+import Header from './components/Header'; // ADICIONADO
 import { Preset, Idea, TextBundle, KssStyle, BatchPlan } from './lib/types';
 import { saveCreation } from './lib/storage';
 
@@ -34,6 +35,7 @@ export default function App() {
   const pill = (label: string) => <span className="chip">{label}</span>;
 
   const computeSeeds = (base: number, count: number) => Array.from({ length: count }, (_, i) => base + i * 101);
+
   const handleGenerate = () => setSeeds(computeSeeds(seedBase, plan.count));
   const handleVaryAll = () => {
     const nb = Math.floor(Math.random() * 100000);
@@ -65,114 +67,118 @@ export default function App() {
   };
 
   return (
-    <main style={shell}>
-      <header style={header}>
-        <h1 style={h1}>
-          <span className="gradText">Kriative Social Studio</span> — Online
-        </h1>
-        <div className="row">
-          <ThemeToggle />
-        </div>
-      </header>
+    <>
+      <Header /> {/* HEADER FIXO NO TOPO */}
 
-      <section className="row" style={{ marginBottom: 12 }}>
-        {pill('Vite + React + TS')}
-        {pill('Fluxo: Ideia → Texto → Visual')}
-        {pill('Estilos visuais')}
-        {pill('Multi-imagem')}
-        {pill('PNG/JPEG/ZIP')}
-      </section>
-
-      <Stepper step={step} onStep={setStep} />
-
-      {step === 0 && (
-        <section className="card" style={{ marginTop: 12 }}>
-          <h3 style={{ marginTop: 0 }}>Passo 1 — Ideia</h3>
-          <IdeaForm value={idea} onChange={setIdea} />
-          <div className="row" style={{ marginTop: 12 }}>
-            <button className="btn" onClick={() => setStep(1)}>
-              Prosseguir para Texto
-            </button>
+      <main className="pt-20" style={shell}> {/* pt-20 = 80px */}
+        <header style={header}>
+          <h1 style={h1}>
+            <span className="gradText">Kriative Social Studio</span> — Online
+          </h1>
+          <div className="row">
+            <ThemeToggle />
           </div>
+        </header>
+
+        <section className="row" style={{ marginBottom: 12 }}>
+          {pill('Vite + React + TS')}
+          {pill('Fluxo: Ideia to Texto to Visual')}
+          {pill('Estilos visuais')}
+          {pill('Multi-imagem')}
+          {pill('PNG/JPEG/ZIP')}
         </section>
-      )}
 
-      {step === 1 && (
-        <section className="card" style={{ marginTop: 12 }}>
-          <h3 style={{ marginTop: 0 }}>Passo 2 — Texto</h3>
-          <TextTools idea={idea} value={text} onChange={setText} />
-          <Planner suggestedTitle={text.title || 'Publicar post'} suggestedDesc={text.caption || text.copy || ''} />
-          <div className="row" style={{ marginTop: 12 }}>
-            <button className="btn" onClick={() => setStep(0)}>Voltar</button>
-            <button className="btn btn--primary" onClick={() => setStep(2)}>Prosseguir para Visual</button>
-          </div>
-        </section>
-      )}
+        <Stepper step={step} onStep={setStep} />
 
-      {step === 2 && (
-        <section className="card" style={{ marginTop: 12 }}>
-          <h3 style={{ marginTop: 0 }}>Passo 3 — Visual</h3>
-          <div className="row" style={{ alignItems: 'center', marginBottom: 8 }}>
-            <PresetPicker preset={preset} onChange={setPreset} />
-            <StylePicker value={style} onChange={setStyle} />
-            <MultiImagePlanner value={plan} onChange={p => { setPlan(p); setSeeds([]); }} />
-            <label className="btn" style={{display:'flex', gap:8, alignItems:'center'}}>
-              <input type="checkbox" checked={showTopBand} onChange={e=>setShowTopBand(e.target.checked)} />
-              Tarja superior
-            </label>
-            <button className="btn btn--primary" onClick={handleGenerate}>Gerar Imagens</button>
-            <button className="btn" onClick={handleVaryAll}>Variar Tudo</button>
-          </div>
-          <ImageUpload value={baseImage} onChange={setBaseImage} />
-          <div className="grid" style={{ marginTop: 12 }}>
-            {seeds.map((seed, idx) => (
-              <div key={seed} className="card">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                  <div style={{ fontSize: 12, opacity: 0.7 }}>#{idx + 1} • seed {seed}</div>
-                  <div className="row">
-                    <button className="btn" onClick={() => handleRegenerateOne(idx)}>Re-gerar</button>
-                    <button className="btn" onClick={() => {
-                      const cvs = document.getElementById(`kss-canvas-${idx}`) as HTMLCanvasElement | null;
-                      if (!cvs) return;
-                      const a = document.createElement('a');
-                      a.href = cvs.toDataURL('image/png');
-                      a.download = `kss_${idx + 1}.png`;
-                      a.click();
-                    }}>PNG</button>
-                    <button className="btn" onClick={() => {
-                      const cvs = document.getElementById(`kss-canvas-${idx}`) as HTMLCanvasElement | null;
-                      if (!cvs) return;
-                      const a = document.createElement('a');
-                      a.href = cvs.toDataURL('image/jpeg', 0.92);
-                      a.download = `kss_${idx + 1}.jpg`;
-                      a.click();
-                    }}>JPEG</button>
-                    <button className="btn" onClick={() => saveCard(idx, 'png')}>Salvar</button>
+        {step === 0 && (
+          <section className="card" style={{ marginTop: 12 }}>
+            <h3 style={{ marginTop: 0 }}>Passo 1 — Ideia</h3>
+            <IdeaForm value={idea} onChange={setIdea} />
+            <div className="row" style={{ marginTop: 12 }}>
+              <button className="btn" onClick={() => setStep(1)}>
+                Prosseguir para Texto
+              </button>
+            </div>
+          </section>
+        )}
+
+        {step === 1 && (
+          <section className="card" style={{ marginTop: 12 }}>
+            <h3 style={{ marginTop: 0 }}>Passo 2 — Texto</h3>
+            <TextTools idea={idea} value={text} onChange={setText} />
+            <Planner suggestedTitle={text.title || 'Publicar post'} suggestedDesc={text.caption || text.copy || ''} />
+            <div className="row" style={{ marginTop: 12 }}>
+              <button className="btn" onClick={() => setStep(0)}>Voltar</button>
+              <button className="btn btn--primary" onClick={() => setStep(2)}>Prosseguir para Visual</button>
+            </div>
+          </section>
+        )}
+
+        {step === 2 && (
+          <section className="card" style={{ marginTop: 12 }}>
+            <h3 style={{ marginTop: 0 }}>Passo 3 — Visual</h3>
+            <div className="row" style={{ alignItems: 'center', marginBottom: 8 }}>
+              <PresetPicker preset={preset} onChange={setPreset} />
+              <StylePicker value={style} onChange={setStyle} />
+              <MultiImagePlanner value={plan} onChange={p => { setPlan(p); setSeeds([]); }} />
+              <label className="btn" style={{display:'flex', gap:8, alignItems:'center'}}>
+                <input type="checkbox" checked={showTopBand} onChange={e=>setShowTopBand(e.target.checked)} />
+                Tarja superior
+              </label>
+              <button className="btn btn--primary" onClick={handleGenerate}>Gerar Imagens</button>
+              <button className="btn" onClick={handleVaryAll}>Variar Tudo</button>
+            </div>
+            <ImageUpload value={baseImage} onChange={setBaseImage} />
+            <div className="grid" style={{ marginTop: 12 }}>
+              {seeds.map((seed, idx) => (
+                <div key={seed} className="card">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <div style={{ fontSize: 12, opacity: 0.7 }}>#{idx + 1} • seed {seed}</div>
+                    <div className="row">
+                      <button className="btn" onClick={() => handleRegenerateOne(idx)}>Re-gerar</button>
+                      <button className="btn" onClick={() => {
+                        const cvs = document.getElementById(`kss-canvas-${idx}`) as HTMLCanvasElement | null;
+                        if (!cvs) return;
+                        const a = document.createElement('a');
+                        a.href = cvs.toDataURL('image/png');
+                        a.download = `kss_${idx + 1}.png`;
+                        a.click();
+                      }}>PNG</button>
+                      <button className="btn" onClick={() => {
+                        const cvs = document.getElementById(`kss-canvas-${idx}`) as HTMLCanvasElement | null;
+                        if (!cvs) return;
+                        const a = document.createElement('a');
+                        a.href = cvs.toDataURL('image/jpeg', 0.92);
+                        a.download = `kss_${idx + 1}.jpg`;
+                        a.click();
+                      }}>JPEG</button>
+                      <button className="btn" onClick={() => saveCard(idx, 'png')}>Salvar</button>
+                    </div>
+                  </div>
+                  <div className="frame">
+                    <VisualCanvas
+                      id={`kss-canvas-${idx}`}
+                      preset={preset}
+                      styleKey={style}
+                      idea={idea}
+                      text={text}
+                      seed={seed}
+                      baseImage={baseImage}
+                      showTopBand={showTopBand}
+                    />
                   </div>
                 </div>
-                <div className="frame">
-                  <VisualCanvas
-                    id={`kss-canvas-${idx}`}
-                    preset={preset}
-                    styleKey={style}
-                    idea={idea}
-                    text={text}
-                    seed={seed}
-                    baseImage={baseImage}
-                    showTopBand={showTopBand}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-          <ExportPanel preset={preset} idea={idea} text={text} styleKey={style} plan={plan} seeds={seeds} />
-          <div className="row" style={{ marginTop: 12 }}>
-            <button className="btn" onClick={() => setStep(1)}>Voltar ao Texto</button>
-          </div>
-        </section>
-      )}
+              ))}
+            </div>
+            <ExportPanel preset={preset} idea={idea} text={text} styleKey={style} plan={plan} seeds={seeds} />
+            <div className="row" style={{ marginTop: 12 }}>
+              <button className="btn" onClick={() => setStep(1)}>Voltar ao Texto</button>
+            </div>
+          </section>
+        )}
 
-      <MyCreations />
-    </main>
+        <MyCreations />
+      </main>
+    </>
   );
 }
