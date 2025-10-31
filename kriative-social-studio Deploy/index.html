@@ -15,7 +15,7 @@
       }
     </script>
 
-    <!-- CSS ORIGINAL -->
+    <!-- CSS ORIGINAL (mantido 100%) -->
     <style>
       :root{--bg:#ffffff;--fg:#111827;--muted:#6b7280;--card:#f9fafb;--border:#e5e7eb;--grad:linear-gradient(135deg,#2563eb,#ef4444);--btn-bg:#ffffff;--btn-fg:#111827;}
       html[data-theme="dark"]{--bg:#0b0f19;--fg:#e5e7eb;--muted:#94a3b8;--card:#0f1629;--border:#1f2937;--btn-bg:#111827;--btn-fg:#e5e7eb;}
@@ -48,66 +48,25 @@
     </script>
   </head>
   <body>
-    <!-- HEADER FIXO -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-[#1A1A1A] border-b border-[#E5E5E5] dark:border-[#404040] shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
-          <div class="flex items-center">
-            <div class="w-8 h-8 bg-gradient-to-r from-[#008080] to-[#FF8C00] rounded-lg"></div>
-            <span class="ml-3 text-xl font-bold text-[#333333] dark:text-white">Social Studio</span>
-          </div>
-          <nav class="hidden md:flex items-center space-x-8">
-            <a href="https://hub.kriative.app" class="text-[#333333] dark:text-white hover:text-[#008080] font-medium">Dashboard</a>
-            <a href="/pricing" class="text-[#333333] dark:text-white hover:text-[#008080] font-medium">Planos</a>
-          </nav>
-          <div class="flex items-center space-x-3">
-            <div class="relative">
-              <button id="lang-btn" class="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-[#2A2A2A] hover:bg-gray-200 dark:hover:bg-[#333333] text-sm font-medium">
-                <span>BR</span> <span>PT-BR</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-              </button>
-              <div id="lang-menu" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-[#2A2A2A] rounded-lg shadow-xl border border-gray-200 dark:border-[#404040] z-50">
-                <button class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#333333] flex items-center space-x-2 text-sm"><span>US</span><span>EN</span></button>
-                <button class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#333333] flex items-center space-x-2 text-sm"><span>BR</span><span>PT-BR</span></button>
-                <button class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#333333] flex items-center space-x-2 text-sm"><span>PT</span><span>PT</span></button>
-                <button class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#333333] flex items-center space-x-2 text-sm"><span>ES</span><span>ES</span></button>
-                <button class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-[#333333] flex items-center space-x-2 text-sm"><span>KR</span><span>KO</span></button>
-              </div>
-            </div>
-            <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#2A2A2A]">
-              <svg class="w-5 h-5 text-[#333333] dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
+    <!-- HEADER SERÁ CARREGADO AQUI -->
+    <div id="kriative-header"></div>
 
-    <!-- PADDING + ROOT -->
-    <div style="padding-top: 80px;">
-      <div id="root"></div>
-    </div>
+    <!-- SEU APP ORIGINAL -->
+    <div id="root"></div>
 
-    <!-- ENTRY POINT CORRETO -->
-    <script type="module">
-      import React from 'react'
-      import ReactDOM from 'react-dom/client'
-      import App from './src/App.tsx'
-      import './src/index.css'
-
-      ReactDOM.createRoot(document.getElementById('root')!).render(
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      )
-    </script>
-
-    <!-- JS DO HEADER -->
+    <!-- CARREGA O HEADER -->
     <script>
-      document.getElementById('lang-btn').addEventListener('click', () => {
-        document.getElementById('lang-menu').classList.toggle('hidden');
-      });
+      fetch('/kriative-header.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('kriative-header').innerHTML = html;
+          // Garante padding
+          document.getElementById('root').style.paddingTop = '80px';
+        })
+        .catch(() => console.log('Header não carregado (offline)'));
     </script>
+
+    <!-- SEU APP (100% INTACTO) -->
+    <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
