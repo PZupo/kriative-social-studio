@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
 const languages = [
-  { code: 'en', label: 'EN', flag: 'US' },
-  { code: 'pt-BR', label: 'PT-BR', flag: 'BR' },
-  { code: 'pt', label: 'PT', flag: 'PT' },
-  { code: 'es', label: 'ES', flag: 'ES' },
-  { code: 'ko', label: 'KO', flag: 'KR' },
+  { code: 'en', label: 'EN', flag: '🇺🇸' },
+  { code: 'pt-BR', label: 'PT-BR', flag: '🇧🇷' },
+  { code: 'pt', label: 'PT', flag: '🇵🇹' },
+  { code: 'es', label: 'ES', flag: '🇪🇸' },
+  { code: 'ko', label: 'KO', flag: '🇰🇷' },
 ];
 
 export default function KriativeHeader({ appName }: { appName: string }) {
@@ -14,7 +14,7 @@ export default function KriativeHeader({ appName }: { appName: string }) {
   const [currentLang, setCurrentLang] = useState(languages[1]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[9999] bg-white dark:bg-[#1A1A1A] border-b border-[#E5E5E5] dark:border-[#404040] shadow-sm">
+    <header id="kriative-header" className="fixed top-0 left-0 right-0 z-[9999] bg-white dark:bg-[#1A1A1A] border-b border-[#E5E5E5] dark:border-[#404040] shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
@@ -72,7 +72,15 @@ export default function KriativeHeader({ appName }: { appName: string }) {
           </div>
 
           <button onClick={() => setOpen(!open)} className="md:hidden p-2">
-            {open ? 'X' : 'Menu'}
+            {open ? (
+              <svg className="w-6 h-6 text-[#333333] dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6 text-[#333333] dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
           </button>
         </div>
       </div>
