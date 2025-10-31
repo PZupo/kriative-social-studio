@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import KriativeHeader from './components/KriativeHeader'; // ← NOVO
+import KriativeHeader from './components/KriativeHeader'; // ← NOVO (só adiciona)
 import ThemeToggle from './components/ThemeToggle';
 import Stepper from './components/Stepper';
 import PresetPicker from './components/PresetPicker';
@@ -15,7 +15,7 @@ import MyCreations from './components/MyCreations';
 import { Preset, Idea, TextBundle, KssStyle, BatchPlan } from './lib/types';
 import { saveCreation } from './lib/storage';
 
-type Step = 0 | 1 | 2; // 0: Ideia | 1: Texto | 2: Visual
+type Step = 0 | 1 | 2;
 
 export default function App() {
   const [step, setStep] = useState<Step>(0);
@@ -30,6 +30,8 @@ export default function App() {
   const [showTopBand, setShowTopBand] = useState<boolean>(true);
 
   const shell: React.CSSProperties = { maxWidth: 1200, margin: '28px auto', padding: '16px' };
+  const header: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 };
+  const h1: React.CSSProperties = { fontSize: 28, margin: 0 };
   const pill = (label: string) => <span className="chip">{label}</span>;
 
   const computeSeeds = (base: number, count: number) => Array.from({ length: count }, (_, i) => base + i * 101);
@@ -65,13 +67,23 @@ export default function App() {
 
   return (
     <>
-      {/* NOVO HEADER PADRÃO */}
+      {/* NOVO HEADER PADRÃO (ACIMA DE TUDO) */}
       <KriativeHeader appName="Social Studio" />
 
-      {/* CONTEÚDO ORIGINAL (só desceu um pouco) */}
+      {/* CONTEÚDO ORIGINAL 100% INTACTO */}
       <main style={shell}>
-        {/* Tags (agora abaixo do header) */}
-        <section className="row" style={{ marginBottom: 12, marginTop: 16 }}>
+        {/* HEADER ORIGINAL (mantido exatamente como estava) */}
+        <header style={header}>
+          <h1 style={h1}>
+            <span className="gradText">Kriative Social Studio</span> — Online
+          </h1>
+          <div className="row">
+            <ThemeToggle />
+          </div>
+        </header>
+
+        {/* Tags */}
+        <section className="row" style={{ marginBottom: 12 }}>
           {pill('Vite + React + TS')}
           {pill('Fluxo: Ideia → Texto → Visual')}
           {pill('Estilos visuais')}
@@ -82,7 +94,7 @@ export default function App() {
         {/* Stepper */}
         <Stepper step={step} onStep={setStep} />
 
-        {/* Passo 1 — Ideia */}
+        {/* ... resto do código 100% igual ao original ... */}
         {step === 0 && (
           <section className="card" style={{ marginTop: 12 }}>
             <h3 style={{ marginTop: 0 }}>Passo 1 — Ideia</h3>
@@ -95,24 +107,18 @@ export default function App() {
           </section>
         )}
 
-        {/* Passo 2 — Texto + Planner */}
         {step === 1 && (
           <section className="card" style={{ marginTop: 12 }}>
             <h3 style={{ marginTop: 0 }}>Passo 2 — Texto</h3>
             <TextTools idea={idea} value={text} onChange={setText} />
             <Planner suggestedTitle={text.title || 'Publicar post'} suggestedDesc={text.caption || text.copy || ''} />
             <div className="row" style={{ marginTop: 12 }}>
-              <button className="btn" onClick={() => setStep(0)}>
-                Voltar
-              </button>
-              <button className="btn btn--primary" onClick={() => setStep(2)}>
-                Prosseguir para Visual
-              </button>
+              <button className="btn" onClick={() => setStep(0)}>Voltar</button>
+              <button className="btn btn--primary" onClick={() => setStep(2)}>Prosseguir para Visual</button>
             </div>
           </section>
         )}
 
-        {/* Passo 3 — Visual */}
         {step === 2 && (
           <section className="card" style={{ marginTop: 12 }}>
             <h3 style={{ marginTop: 0 }}>Passo 3 — Visual</h3>
@@ -120,8 +126,8 @@ export default function App() {
               <PresetPicker preset={preset} onChange={setPreset} />
               <StylePicker value={style} onChange={setStyle} />
               <MultiImagePlanner value={plan} onChange={p => { setPlan(p); setSeeds([]); }} />
-              <label className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <input type="checkbox" checked={showTopBand} onChange={e => setShowTopBand(e.target.checked)} />
+              <label className="btn" style={{display:'flex', gap:8, alignItems:'center'}}>
+                <input type="checkbox" checked={showTopBand} onChange={e=>setShowTopBand(e.target.checked)} />
                 Tarja superior
               </label>
               <button className="btn btn--primary" onClick={handleGenerate}>Gerar Imagens</button>
@@ -151,7 +157,7 @@ export default function App() {
                         a.download = `kss_${idx + 1}.jpg`;
                         a.click();
                       }}>JPEG</button>
-                      <button className="btn" onClick={() => saveCard(idx, 'png')}>Salvar</button>
+                      <button className="btn" onClick={()=>saveCard(idx,'png')}>Salvar</button>
                     </div>
                   </div>
                   <div className="frame">
@@ -171,14 +177,11 @@ export default function App() {
             </div>
             <ExportPanel preset={preset} idea={idea} text={text} styleKey={style} plan={plan} seeds={seeds} />
             <div className="row" style={{ marginTop: 12 }}>
-              <button className="btn" onClick={() => setStep(1)}>
-                Voltar ao Texto
-              </button>
+              <button className="btn" onClick={() => setStep(1)}>Voltar ao Texto</button>
             </div>
           </section>
         )}
 
-        {/* Minhas Criações */}
         <MyCreations />
       </main>
     </>
