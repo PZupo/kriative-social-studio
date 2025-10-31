@@ -4,49 +4,128 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kriative Social Studio</title>
+    
+    <!-- Fontes -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-  :root{
-    --bg:#ffffff; --fg:#111827; --muted:#6b7280; --card:#f9fafb; --border:#e5e7eb;
-    --grad: linear-gradient(135deg,#2563eb,#ef4444);
-    --btn-bg:#ffffff; --btn-fg:#111827;
-  }
-  html[data-theme="dark"]{
-    --bg:#0b0f19; --fg:#e5e7eb; --muted:#94a3b8; --card:#0f1629; --border:#1f2937;
-    --btn-bg:#111827; --btn-fg:#e5e7eb;
-  }
-  *{box-sizing:border-box}
-  body{margin:0; font-family:Poppins,system-ui,Arial; background:var(--bg); color:var(--fg);}
-  .tag{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:8px;font-size:12px}
-  .btn{padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:var(--btn-bg);color:var(--btn-fg);cursor:pointer}
-  .btn[disabled]{opacity:.5;cursor:not-allowed}
-  .btn--primary{border-color:#60a5fa}
-  .chip{padding:6px 10px;border:1px solid var(--border);border-radius:999px;font-size:12px}
-  .row{display:flex;gap:8px;flex-wrap:wrap}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
-  .gradText{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill, minmax(280px,1fr))}
-  .frame{border:1px solid var(--border); border-radius:12px; overflow:hidden}
-</style>
+    
+    <!-- Tailwind + Cores Kriative -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              kriative: {
+                teal: '#008080',
+                orange: '#FF8C00',
+              }
+            }
+          }
+        }
+      }
+    </script>
 
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "vite": "https://aistudiocdn.com/vite@^7.1.12",
-    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.4",
-    "fs": "https://aistudiocdn.com/fs@^0.0.1-security",
-    "jszip": "https://aistudiocdn.com/jszip@^3.10.1"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
-</head>
+    <!-- CSS Global (mantido) -->
+    <style>
+      :root{
+        --bg:#ffffff; --fg:#111827; --muted:#6b7280; --card:#f9fafb; --border:#e5e7eb;
+        --grad: linear-gradient(135deg,#2563eb,#ef4444);
+        --btn-bg:#ffffff; --btn-fg:#111827;
+      }
+      html[data-theme="dark"]{
+        --bg:#0b0f19; --fg:#e5e7eb; --muted:#94a3b8; --card:#0f1629; --border:#1f2937;
+        --btn-bg:#111827; --btn-fg:#e5e7eb;
+      }
+      *{box-sizing:border-box}
+      body{margin:0; font-family:Poppins,system-ui,Arial; background:var(--bg); color:var(--fg);}
+      .tag{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:8px;font-size:12px}
+      .btn{padding:8px 12px;border:1px solid var(--border);border-radius:10px;background:var(--btn-bg);color:var(--btn-fg);cursor:pointer}
+      .btn[disabled]{opacity:.5;cursor:not-allowed}
+      .btn--primary{border-color:#60a5fa}
+      .chip{padding:6px 10px;border:1px solid var(--border);border-radius:999px;font-size:12px}
+      .row{display:flex;gap:8px;flex-wrap:wrap}
+      .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+      .gradText{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+      .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill, minmax(280px,1fr))}
+      .frame{border:1px solid var(--border); border-radius:12px; overflow:hidden}
+      
+      /* GARANTE QUE O HEADER APAREÇA NO TOPO */
+      #kriative-header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 9999 !important;
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      .dark #kriative-header {
+        background: #1A1A1A !important;
+        border-bottom: 1px solid #404040 !important;
+      }
+    </style>
+
+    <!-- Importmap -->
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://aistudiocdn.com/react@^19.2.0",
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+        "react/": "https://aistudiocdn.com/react@^19.2.0/",
+        "vite": "https://aistudiocdn.com/vite@^7.1.12",
+        "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.4",
+        "fs": "https://aistudiocdn.com/fs@^0.0.1-security",
+        "jszip": "https://aistudiocdn.com/jszip@^3.10.1"
+      }
+    }
+    </script>
+
+    <link rel="stylesheet" href="/index.css">
+  </head>
   <body>
+    <!-- ROOT DO REACT -->
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
-  <script type="module" src="/index.tsx"></script>
-</body>
+
+    <!-- FORÇA O HEADER A APARECER NO TOPO (GARANTIA TOTAL) -->
+    <div id="kriative-header"></div>
+
+    <!-- CARREGA O APP -->
+    <script type="module" src="/src/index.tsx"></script>
+
+    <!-- SCRIPT DE GARANTIA (SE O REACT NÃO RENDERIZAR O HEADER) -->
+    <script>
+      // Se o header não aparecer em 3s, força via DOM
+      setTimeout(() => {
+        const header = document.getElementById('kriative-header');
+        if (header && header.children.length === 0) {
+          header.innerHTML = `
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                  <div class="w-8 h-8 bg-gradient-to-r from-[#008080] to-[#FF8C00] rounded-lg"></div>
+                  <span class="ml-3 text-xl font-bold">Social Studio</span>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                  <a href="https://hub.kriative.app" class="hover:text-[#008080]">Dashboard</a>
+                  <a href="/pricing" class="hover:text-[#008080]">Planos</a>
+                </nav>
+                <div class="flex items-center space-x-3">
+                  <button class="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-gray-100 text-sm">
+                    <span>BR</span> <span>PT-BR</span>
+                  </button>
+                  <button class="p-2 rounded-full hover:bg-gray-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }, 3000);
+    </script>
+  </body>
 </html>
