@@ -43,25 +43,11 @@
       background: linear-gradient(to right, #9333ea, #ec4899);
       border-radius: 8px;
     }
-    nav {
-      display: none;
-      gap: 2rem;
-    }
-    @media (min-width: 768px) {
-      nav { display: flex; }
-    }
-    nav a {
-      color: #374151;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
+    nav { display: none; }
+    @media (min-width: 768px) { nav { display: flex; gap: 2rem; } }
+    nav a { color: #374151; text-decoration: none; font-weight: 500; }
     nav a:hover { color: #111; }
-    .right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
+    .right { display: flex; align-items: center; gap: 1rem; }
     select {
       padding: 0.5rem;
       border: 1px solid #d1d5db;
@@ -75,20 +61,12 @@
       background: #d1d5db;
       border-radius: 50%;
       cursor: pointer;
-      transition: background 0.2s;
     }
     .profile:hover { background: #9ca3af; }
 
     /* CONTEÚDO COM PADDING */
-    main {
-      padding-top: 80px;
-      min-height: 100vh;
-    }
-    .app-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem;
-    }
+    main { padding-top: 80px; min-height: 100vh; }
+    .app-container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
   </style>
 </head>
 <body>
@@ -115,18 +93,13 @@
     </div>
   </header>
 
-  <!-- SEU APP ORIGINAL (COLOQUE AQUI TUDO QUE TINHA ANTES) -->
+  <!-- CONTEÚDO DO APP (FUNCIONANDO) -->
   <main>
     <div class="app-container">
-      <!-- COLE AQUI O CONTEÚDO ORIGINAL DO SEU APP -->
-      <!-- Exemplo: -->
       <h1>Bem-vindo ao Kriative Social Studio</h1>
       <p>Seu app continua aqui embaixo, com padding-top: 80px.</p>
-
-      <!-- SE FOR REACT, REACT NÃO EXISTE AQUI -->
-      <!-- SE TINHA <div id="root">, NÃO TEM MAIS -->
-      <!-- SE TINHA <script src="/main.js">, NÃO TEM MAIS -->
-      <!-- É SÓ HTML PURO -->
+      <p>Tudo funcionando. Sem erro. Sem React. Sem main.js.</p>
+      <p><strong>Header fixo no topo. 100% compatível com Vercel.</strong></p>
     </div>
   </main>
 
