@@ -11,7 +11,6 @@ import ExportPanel from './components/ExportPanel';
 import ImageUpload from './components/ImageUpload';
 import Planner from './components/Planner';
 import MyCreations from './components/MyCreations';
-import Header from './components/Header'; // ADICIONADO
 import { Preset, Idea, TextBundle, KssStyle, BatchPlan } from './lib/types';
 import { saveCreation } from './lib/storage';
 
@@ -29,13 +28,11 @@ export default function App() {
   const [baseImage, setBaseImage] = useState<string | null>(null);
   const [showTopBand, setShowTopBand] = useState<boolean>(true);
 
-  const shell: React.CSSProperties = { maxWidth: 1200, margin: '28px auto', padding: '16px' };
-  const header: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 };
+  const shell: React.CSSProperties = { maxWidth: 1200, margin: '0 auto', padding: '16px' };
   const h1: React.CSSProperties = { fontSize: 28, margin: 0 };
   const pill = (label: string) => <span className="chip">{label}</span>;
 
   const computeSeeds = (base: number, count: number) => Array.from({ length: count }, (_, i) => base + i * 101);
-
   const handleGenerate = () => setSeeds(computeSeeds(seedBase, plan.count));
   const handleVaryAll = () => {
     const nb = Math.floor(Math.random() * 100000);
@@ -48,79 +45,81 @@ export default function App() {
     const cvs = document.getElementById(`kss-canvas-${idx}`) as HTMLCanvasElement | null;
     if (!cvs) { alert('Canvas não encontrado.'); return; }
     try {
-      const dataURL = type === 'png'
-        ? cvs.toDataURL('image/png')
-        : cvs.toDataURL('image/jpeg', 0.92);
-      const id = saveCreation({
-        dataURL,
-        meta: { preset, style, idea, text, plan, seed: seeds[idx], type }
-      });
-      console.log('Criação salva:', id);
-      alert('Salvo em "Minhas Criações".');
+      const dataURL = type === 'png' ? cvs.toDataURL('image/png') : cvs.toDataURL('image/jpeg', 0.92);
+      const id = saveCreation({ dataURL, meta: { preset, style, idea, text, plan, seed: seeds[idx], type } });
+      alert('Salvo em “Minhas Criações”.');
     } catch (err: any) {
       const msg = (err && err.name === 'SecurityError')
-        ? 'Não foi possível salvar porque a imagem base é externa sem permissões (CORS). Use o botão "Enviar imagem" ou gere sem imagem base.'
+        ? 'Não foi possível salvar porque a imagem base é externa sem permissões (CORS). Use o botão “Enviar imagem” (upload do seu dispositivo) ou gere sem imagem base.'
         : 'Falha ao salvar esta criação.';
-      console.error(err);
       alert(msg);
     }
   };
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 shadow-sm">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="flex items-center justify-between h-16">
-      <div className="flex items-center space-x-2">
-        <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg"></div>
-        <span className="font-bold text-xl text-gray-900">Social Studio</span>
-      </div>
-      <div className="flex items-center space-x-4">
-        <select className="text-sm border border-gray-300 rounded-md px-3 py-1">
-          <option>PT-BR</option><option>EN</option><option>ES</option>
-        </select>
-        <button className="w-8 h-8 bg-gray-300 rounded-full"></button>
-      </div>
-    </div>
-  </div>
-</header>
-
-<main className="pt-20">
-  {/* seu conteúdo */}
-</main>
-  <>
-    {/* HEADER FIXO */}
-    <header style={{
-      position: 'fixed', top: 0, left: 0, right: 0,
-      background: 'white', borderBottom: '1px solid #e5e7eb',
-      zIndex: 50, height: 64, boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-    }}>
-      <div style={{
-        maxWidth: 1200, margin: '0 auto', padding: '0 1rem',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%'
+      {/* HEADER FIXO */}
+      <header style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        background: 'white',
+        borderBottom: '1px solid #e5e7eb',
+        zIndex: 50,
+        height: 64,
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <div style={{ width: 32, height: 32, background: 'linear-gradient(to right, #9333ea, #ec4899)', borderRadius: 8 }}></div>
-          <span style={{ fontWeight: 'bold', fontSize: '1.25rem', color: '#111' }}>Social Studio</span>
+        <div style={{
+          maxWidth: 1200,
+          margin: '0 auto',
+          padding: '0 1rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          height: '100%'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{
+              width: 32,
+              height: 32,
+              background: 'linear-gradient(to right, #9333ea, #ec4899)',
+              borderRadius: 8
+            }}></div>
+            <span style={{ fontWeight: 'bold', fontSize: '1.25rem', color: '#111' }}>Social Studio</span>
+          </div>
+          <nav style={{ display: 'flex', gap: '1.5rem' }}>
+            <a href="/" style={{ color: '#374151', textDecoration: 'none', fontWeight: 500 }}>Dashboard</a>
+            <a href="/planos" style={{ color: '#374151', textDecoration: 'none', fontWeight: 500 }}>Planos</a>
+          </nav>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <select style={{
+              padding: '0.5rem',
+              border: '1px solid #d1d5db',
+              borderRadius: 6,
+              fontSize: '0.875rem',
+              background: 'white'
+            }}>
+              <option>PT-BR</option>
+              <option>EN</option>
+              <option>ES</option>
+            </select>
+            <button style={{
+              width: 32,
+              height: 32,
+              background: '#d1d5db',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              border: 'none'
+            }} aria-label="Perfil"></button>
+          </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <select style={{ padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: 6, fontSize: '0.875rem' }}>
-            <option>PT-BR</option><option>EN</option><option>ES</option>
-          </select>
-          <button style={{ width: 32, height: 32, background: '#d1d5db', borderRadius: '50%' }} aria-label="Perfil"></button>
-        </div>
-      </div>
-    </header>
+      </header>
 
-    {/* SEU APP COM PADDING */}
-    <main style={{ paddingTop: 80 }}>
-      {/* ...seu conteúdo original... */}
-    </main>
-  </>
-);
-
-      <main className="pt-20" style={shell}> {/* pt-20 = 80px */}
-        <header style={header}>
+      {/* APP COM PADDING */}
+      <main style={{ ...shell, paddingTop: 80 }}>
+        {/* Header interno */}
+        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <h1 style={h1}>
             <span className="gradText">Kriative Social Studio</span> — Online
           </h1>
@@ -129,24 +128,25 @@ export default function App() {
           </div>
         </header>
 
+        {/* Tags */}
         <section className="row" style={{ marginBottom: 12 }}>
           {pill('Vite + React + TS')}
-          {pill('Fluxo: Ideia to Texto to Visual')}
+          {pill('Fluxo: Ideia → Texto → Visual')}
           {pill('Estilos visuais')}
           {pill('Multi-imagem')}
           {pill('PNG/JPEG/ZIP')}
         </section>
 
+        {/* Stepper */}
         <Stepper step={step} onStep={setStep} />
 
+        {/* Passos */}
         {step === 0 && (
           <section className="card" style={{ marginTop: 12 }}>
             <h3 style={{ marginTop: 0 }}>Passo 1 — Ideia</h3>
             <IdeaForm value={idea} onChange={setIdea} />
             <div className="row" style={{ marginTop: 12 }}>
-              <button className="btn" onClick={() => setStep(1)}>
-                Prosseguir para Texto
-              </button>
+              <button className="btn" onClick={() => setStep(1)}>Prosseguir para Texto</button>
             </div>
           </section>
         )}
@@ -170,8 +170,8 @@ export default function App() {
               <PresetPicker preset={preset} onChange={setPreset} />
               <StylePicker value={style} onChange={setStyle} />
               <MultiImagePlanner value={plan} onChange={p => { setPlan(p); setSeeds([]); }} />
-              <label className="btn" style={{display:'flex', gap:8, alignItems:'center'}}>
-                <input type="checkbox" checked={showTopBand} onChange={e=>setShowTopBand(e.target.checked)} />
+              <label className="btn" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <input type="checkbox" checked={showTopBand} onChange={e => setShowTopBand(e.target.checked)} />
                 Tarja superior
               </label>
               <button className="btn btn--primary" onClick={handleGenerate}>Gerar Imagens</button>
