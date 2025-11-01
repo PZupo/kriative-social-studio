@@ -68,7 +68,26 @@ export default function App() {
 
   return (
     <>
-      return (
+      <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 shadow-sm">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between h-16">
+      <div className="flex items-center space-x-2">
+        <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg"></div>
+        <span className="font-bold text-xl text-gray-900">Social Studio</span>
+      </div>
+      <div className="flex items-center space-x-4">
+        <select className="text-sm border border-gray-300 rounded-md px-3 py-1">
+          <option>PT-BR</option><option>EN</option><option>ES</option>
+        </select>
+        <button className="w-8 h-8 bg-gray-300 rounded-full"></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main className="pt-20">
+  {/* seu conteúdo */}
+</main>
   <>
     {/* HEADER FIXO */}
     <header style={{
