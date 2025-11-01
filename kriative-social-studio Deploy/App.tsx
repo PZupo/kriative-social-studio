@@ -131,7 +131,7 @@ export default function App() {
         {/* Tags */}
         <section className="row" style={{ marginBottom: 12 }}>
           {pill('Vite + React + TS')}
-          {pill('Fluxo: Ideia → Texto → Visual')}
+          {pill('Fluxo: Ideia to Texto to Visual')}
           {pill('Estilos visuais')}
           {pill('Multi-imagem')}
           {pill('PNG/JPEG/ZIP')}
