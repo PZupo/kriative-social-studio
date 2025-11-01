@@ -68,7 +68,37 @@ export default function App() {
 
   return (
     <>
-      <Header /> {/* HEADER FIXO NO TOPO */}
+      return (
+  <>
+    {/* HEADER FIXO */}
+    <header style={{
+      position: 'fixed', top: 0, left: 0, right: 0,
+      background: 'white', borderBottom: '1px solid #e5e7eb',
+      zIndex: 50, height: 64, boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+    }}>
+      <div style={{
+        maxWidth: 1200, margin: '0 auto', padding: '0 1rem',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ width: 32, height: 32, background: 'linear-gradient(to right, #9333ea, #ec4899)', borderRadius: 8 }}></div>
+          <span style={{ fontWeight: 'bold', fontSize: '1.25rem', color: '#111' }}>Social Studio</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <select style={{ padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: 6, fontSize: '0.875rem' }}>
+            <option>PT-BR</option><option>EN</option><option>ES</option>
+          </select>
+          <button style={{ width: 32, height: 32, background: '#d1d5db', borderRadius: '50%' }} aria-label="Perfil"></button>
+        </div>
+      </div>
+    </header>
+
+    {/* SEU APP COM PADDING */}
+    <main style={{ paddingTop: 80 }}>
+      {/* ...seu conteúdo original... */}
+    </main>
+  </>
+);
 
       <main className="pt-20" style={shell}> {/* pt-20 = 80px */}
         <header style={header}>
