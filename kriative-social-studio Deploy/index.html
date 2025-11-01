@@ -4,14 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kriative Social Studio</title>
-
-  <!-- FONTES -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-
-  <!-- TAILWIND CDN (só pro header) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- ESTILOS ORIGINAIS DO APP -->
   <style>
     :root{
       --bg:#ffffff; --fg:#111827; --muted:#6b7280; --card:#f9fafb; --border:#e5e7eb;
@@ -35,11 +28,7 @@
     .grid{display:grid; gap:12px; grid-template-columns:repeat(auto-fill, minmax(280px,1fr))}
     .frame{border:1px solid var(--border); border-radius:12px; overflow:hidden}
   </style>
-
-  <!-- CSS DO APP -->
   <link rel="stylesheet" href="/index.css">
-
-  <!-- IMPORTMAP (necessário pro React) -->
   <script type="importmap">
   {
     "imports": {
@@ -53,40 +42,37 @@
     }
   }
   </script>
-
-  <!-- SCRIPT DO APP -->
   <script type="module" crossorigin src="/assets/index-C75-rJQP.js"></script>
 </head>
-<body>
-
-  <!-- HEADER FIXO -->
-  <header class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <div class="flex items-center space-x-2">
-          <div class="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg"></div>
-          <span class="font-bold text-xl text-gray-900">Social Studio</span>
+  <body>
+    <!-- HEADER FIXO -->
+    <header style="position: fixed; top: 0; left: 0; right: 0; background: white; border-bottom: 1px solid #e5e7eb; z-index: 50; height: 64px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; display: flex; justify-content: space-between; align-items: center; height: 100%;">
+        <!-- Logo -->
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div style="width: 32px; height: 32px; background: linear-gradient(to right, #9333ea, #ec4899); border-radius: 8px;"></div>
+          <span style="font-weight: bold; font-size: 1.25rem; color: #111;">Social Studio</span>
         </div>
-        <nav class="hidden md:flex space-x-8">
-          <a href="/" class="text-gray-700 hover:text-gray-900 font-medium">Dashboard</a>
-          <a href="/planos" class="text-gray-700 hover:text-gray-900 font-medium">Planos</a>
+        <!-- Navegação -->
+        <nav style="display: none;">
+          <a href="/" style="color: #374151; text-decoration: none; font-weight: 500; margin-left: 2rem;">Dashboard</a>
+          <a href="/planos" style="color: #374151; text-decoration: none; font-weight: 500; margin-left: 2rem;">Planos</a>
         </nav>
-        <div class="flex items-center space-x-4">
-          <select class="text-sm border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-purple-600">
+        <!-- Idioma + Perfil -->
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <select style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.875rem;">
             <option>PT-BR</option>
             <option>EN</option>
             <option>ES</option>
           </select>
-          <button class="w-8 h-8 bg-gray-300 rounded-full hover:bg-gray-400 transition" aria-label="Perfil"></button>
+          <button style="width: 32px; height: 32px; background: #d1d5db; border-radius: 50%; cursor: pointer;" aria-label="Perfil"></button>
         </div>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <!-- APP REACT COM PADDING -->
-  <main style="padding-top: 80px; min-height: 100vh;">
-    <div id="root"></div>
-  </main>
-
-</body>
+    <!-- APP REACT COM PADDING -->
+    <main style="padding-top: 80px; min-height: 100vh;">
+      <div id="root"></div>
+    </main>
+  </body>
 </html>
