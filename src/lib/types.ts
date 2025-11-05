@@ -1,4 +1,15 @@
 // src/lib/types.ts
+
+/** 🎨 Estilos visuais suportados no app */
+export type KssStyle =
+  | "disney"
+  | "cyberpunk"
+  | "ghibli"
+  | "noir"
+  | "watercolor"   // novo
+  | "neon"         // novo
+  | "papercut";    // novo
+  
 export type Preset = { name: string; w: number; h: number };
 
 export type Idea = {
@@ -19,12 +30,4 @@ export type BatchPlan = {
   count: number;
 };
 
-/** 🎨 Estilos visuais suportados no app */
-export type KssStyle =
-  | "disney"
-  | "cyberpunk"
-  | "ghibli"
-  | "noir"
-  | "watercolor"   // novo
-  | "neon"         // novo
-  | "papercut";    // novo
+
