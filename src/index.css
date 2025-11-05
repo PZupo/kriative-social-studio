@@ -1,0 +1,257 @@
+/* =========================
+   Kriative Social Studio — KS Core Theme (Tailwind v4)
+   Apenas visual. Sem alterar lógica.
+   ========================= */
+
+/* Tailwind v4 */
+@import "tailwindcss";
+
+/* ---------- Paleta base (Lead Capture) ---------- */
+:root {
+  --bg:     #f7f3eb;  /* fundo bege claro */
+  --fg:     #111827;  /* texto (gray-900) */
+  --card:   #ffffff;  /* cartões */
+  --border: #e5e7eb;  /* borda clara */
+  --muted:  #6b7280;  /* apoio (gray-500) */
+
+  /* Espaços KS Core */
+  --space-sm: 0.5rem;   /* 8px */
+  --space-md: 1rem;     /* 16px */
+  --space-lg: 1.5rem;   /* 24px */
+}
+
+html.dark {
+  --bg:     #0b0f19;  /* fundo escuro */
+  --fg:     #f3f4f6;  /* texto claro */
+  --card:   #0f1629;  /* cartão escuro */
+  --border: #1f2937;  /* borda escura */
+  --muted:  #94a3b8;  /* apoio (slate-400) */
+}
+
+/* ---------- Base ---------- */
+html, body { background: var(--bg); color: var(--fg); }
+body { margin: 0; font-family: "Poppins", system-ui, Arial, sans-serif; }
+#root { min-height: 100dvh; }
+
+.row { display:flex; align-items:center; gap: var(--space-sm); flex-wrap:wrap; }
+
+/* ---------- Cards / Containers ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  padding: var(--space-md);
+  color: var(--fg);
+
+  /* Margens externas consistentes entre blocos */
+  margin-block: var(--space-lg);
+}
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px dashed #cbd5e1;
+  padding: 0.5rem;
+}
+html.dark .frame { border-color: #475569; }
+
+.grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* ---------- Tipografia ---------- */
+.gradText {
+  background: linear-gradient(90deg, #0f766e, #f97316);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Botões (KS Core) ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  padding: 0 0.875rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--fg);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease, transform 60ms ease;
+}
+.btn:hover { background: #f3f4f6; }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid #0ea5e9; outline-offset: 2px; }
+
+/* Primário (gradiente KS) */
+.btn--primary {
+  border-color: transparent;
+  background: linear-gradient(90deg, #0f766e, #f97316);
+  color: #ffffff;
+}
+.btn--primary:hover { filter: brightness(0.95); }
+.btn--primary:active { transform: translateY(1px); }
+
+/* Modo escuro — contraste garantido */
+html.dark .btn {
+  background-color: #1e293b; /* slate-800 */
+  color: #f3f4f6;
+  border-color: #334155;     /* slate-700 */
+}
+html.dark .btn:hover { background-color: #334155; }
+html.dark .btn--primary {
+  background: linear-gradient(90deg, #0f766e, #f97316);
+  color: #ffffff;
+  border-color: transparent;
+}
+html.dark .btn--primary:hover { filter: brightness(0.9); }
+
+/* Variação suave p/ secundários (se aplicada em alguns botões) */
+.btn--soft {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+.btn--soft:hover { background: #f3f4f6; }
+html.dark .btn--soft { background-color:#1e293b; color:#f3f4f6; border-color:#334155; }
+html.dark .btn--soft:hover { background-color:#334155; }
+
+/* ---------- Chips (PresetPicker / StylePicker) ---------- */
+.chip {
+  background: #ffffff;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.75rem;
+  transition: background .12s ease, color .12s ease, border-color .12s;
+}
+.chip:hover { background:#f3f4f6; }
+
+html.dark .chip       { background:#1e293b; color:#f3f4f6; border-color:#334155; }
+html.dark .chip:hover { background:#334155; color:#f8fafc; }
+
+/* Selecionado */
+.chip.is-active,
+.chip[aria-pressed="true"],
+.chip[aria-selected="true"] {
+  background:#dbeafe; border-color:#93c5fd; color:#1e3a8a;
+}
+html.dark .chip.is-active,
+html.dark .chip[aria-pressed="true"],
+html.dark .chip[aria-selected="true"] {
+  background:#0f766e; border-color:#0f766e; color:#ffffff;
+}
+
+/* ---------- Formulários ---------- */
+input, textarea, select {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+}
+input, textarea { caret-color: var(--fg); }
+
+/* Placeholders visíveis */
+input::placeholder, textarea::placeholder { color: #6b7280; }                /* gray-500 */
+html.dark input::placeholder, html.dark textarea::placeholder { color: #94a3b8; } /* slate-400 */
+
+/* Labels/títulos dentro de cards */
+.card label, .card h3, .card .form-label { color: var(--fg); }
+
+/* File button (se usado) */
+input[type="file"]::file-selector-button {
+  background: #ffffff; color: var(--fg); border: 1px solid var(--border);
+  height: 2.25rem; padding: 0 0.875rem; border-radius: 0.5rem;
+}
+html.dark input[type="file"]::file-selector-button {
+  background-color:#1e293b; color:#f3f4f6; border-color:#334155;
+}
+
+/* === KS Core — títulos e ritmo vertical dos cards === */
+
+/* Títulos principais dos blocos (Passo 1/2/3) */
+.card h3 {
+  margin: 0 0 12px;
+  line-height: 1.2;
+  font-weight: 700;
+  font-size: 1.125rem; /* 18px */
+  color: var(--fg);
+}
+
+/* Subtítulos dos subcards (Formatos / Estilos / Seletores) */
+.card h4 {
+  margin: 0 0 8px;
+  line-height: 1.2;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--fg);
+  opacity: 0.92;
+}
+
+/* Ritmo vertical interno (espaço consistente entre elementos dentro do card) */
+.card > .row + .row,
+.card > .row + .grid,
+.card > .grid + .row,
+.card > .grid + .grid,
+.card > .frame + .row,
+.card > .row + .frame {
+  margin-top: 12px;
+}
+
+/* Cards “aninhados” (os 3 subcards do Passo 3) com respiro padrão */
+.card .card {
+  margin: 0;                /* já controlamos o gap com flex/gap na página */
+  padding: 12px 14px;       /* um pouco mais compacto que o card externo */
+  border-radius: 12px;
+}
+
+/* Campos de formulário dentro de cards: coerência de borda/altura */
+.card input,
+.card textarea,
+.card select {
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.card select,
+.card input[type="text"],
+.card input[type="search"],
+.card input[type="number"] {
+  height: 40px;
+  padding: 0 12px;
+}
+.card textarea {
+  padding: 10px 12px;
+}
+
+/* Acessibilidade de foco */
+.btn:focus-visible {
+  outline: 2px solid #0ea5e9; /* azul suave */
+  outline-offset: 2px;
+}
+
+/* Banner de sucesso (claro/escuro coerente) */
+.alert {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+}
+.alert--success {
+  background: #ecfdf5;  /* green-50 */
+  color: #065f46;       /* green-800 */
+  border-color: #a7f3d0;/* green-200 */
+}
+html.dark .alert--success {
+  background: #052e2b;  /* deep teal */
+  color: #d1fae5;       /* green-100 */
+  border-color: #115e59;/* teal-700 */
+}

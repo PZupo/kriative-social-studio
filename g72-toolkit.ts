@@ -1,0 +1,1 @@
+export function assert<T>(v:T, msg='Unexpected null/undefined'){ if(v===null||v===undefined) throw new Error(msg); return v; }

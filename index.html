@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kriative Social Studio</title>
+
+    <!-- Fonte oficial -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Estilos base globais (mínimos, sem sobrescrever Tailwind) -->
+    <style>
+      :root {
+        --bg: #f7f3eb;        /* bege claro padrão Lead Capture */
+        --fg: #111827;        /* texto padrão */
+        --card: #ffffff;      /* fundo de cards */
+        --border: #e5e7eb;    /* bordas leves */
+      }
+
+      html[data-theme="dark"] {
+        --bg: #0b0f19;
+        --fg: #f3f4f6;
+        --card: #0f1629;
+        --border: #1f2937;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Poppins", system-ui, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+
+      #root {
+        min-height: 100dvh;
+      }
+    </style>
+
+    <!-- Entrypoint do Vite -->
+    <script type="module" src="/src/index.tsx"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

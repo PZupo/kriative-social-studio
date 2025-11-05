@@ -1,0 +1,5 @@
+{
+  "name": "Kriative Social Studio",
+  "description": "MVP with a 3-step flow (Idea > Visual > Text), real-time preview, mock generation (title, copy, caption, hashtags), PNG/JPEG/ZIP export, and local scheduling. Ready for Vercel.",
+  "requestFramePermissions": []
+}
