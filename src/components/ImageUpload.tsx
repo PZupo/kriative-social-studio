@@ -1,25 +1,58 @@
-import React, { useRef } from 'react';
+import React from "react";
 
-export default function ImageUpload({value, onChange}:{value:string|null; onChange:(v:string|null)=>void}){
-  const inputRef = useRef<HTMLInputElement|null>(null);
-  const clear = () => onChange(null);
-  const pick = () => inputRef.current?.click();
-  const onFile = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const f = e.target.files?.[0];
-    if(!f) return;
-    const rdr = new FileReader();
-    rdr.onload = () => onChange(String(rdr.result));
-    rdr.readAsDataURL(f);
+type Props = {
+  value: string | null;
+  onChange: (url: string | null) => void;
+};
+
+export default function ImageUpload({ value, onChange }: Props) {
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const result = ev.target?.result as string;
+      onChange(result);
+    };
+    reader.readAsDataURL(file);
   };
+
   return (
-    <div className="card" style={{marginTop:8}}>
-      <strong>Imagem base (opcional)</strong>
-      <div className="row" style={{marginTop:8}}>
-        <button className="btn" onClick={pick}>📤 Enviar imagem</button>
-        <button className="btn" onClick={clear} disabled={!value}>🗑 Remover</button>
+    <div className="card">
+      <h4 className="m-0 mb-2">Imagem base (opcional)</h4>
+      <div className="flex items-center gap-2 mb-2">
+        <label className="btn btn--soft cursor-pointer">
+          📤 Enviar imagem
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFile}
+          />
+        </label>
+        {value && (
+          <button className="btn" onClick={() => onChange(null)}>
+            🗑️ Remover
+          </button>
+        )}
       </div>
-      <input ref={inputRef} type="file" accept="image/*" onChange={onFile} hidden />
-      {value && <div style={{marginTop:8, fontSize:12, opacity:.7}}>Imagem carregada ✓ (será ajustada ao canvas)</div>}
+
+      {value ? (
+        <div className="flex flex-col items-start gap-2">
+          <span className="text-xs opacity-70">
+            Imagem carregada ✓ (será ajustada ao canvas)
+          </span>
+          <img
+            src={value}
+            alt="Prévia da imagem base"
+            className="w-24 h-24 object-cover rounded-lg border border-gray-300 dark:border-gray-700"
+          />
+        </div>
+      ) : (
+        <p className="text-xs opacity-70">
+          Nenhuma imagem enviada. A geração usará plano neutro.
+        </p>
+      )}
     </div>
   );
 }

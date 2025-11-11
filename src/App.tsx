@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./i18n/i18n";
 
-import Header from "./components/Header";
-import FeedbackBox from "./components/FeedbackBox"; // ✅ adicionado
+import KSHeader, { type KSTab } from "./components/KSHeader";
+import FeedbackBox from "./components/FeedbackBox";
 
 import Dashboard from "./pages/Dashboard";
 import Editor from "./pages/Editor";
@@ -11,11 +11,23 @@ import Plans from "./pages/Plans";
 import Login from "./pages/Login";
 
 export default function App() {
+  const tabs: KSTab[] = [
+    { to: "/editor", label: "Criação" },
+    { to: "/dashboard", label: "Dashboard" },
+    { to: "/library", label: "Biblioteca" },
+    { to: "/plans", label: "Planos" },
+  ];
+
   return (
     <BrowserRouter>
       {/* Sem classes de bg/text aqui: herdamos do CSS global (var(--bg)/var(--fg)) */}
       <div className="min-h-dvh">
-        <Header />
+        <KSHeader
+          appName="Kriative Social Studio"
+          subtitle="Criação de Posts e Carrosséis com IA"
+          tabs={tabs}
+        />
+
         {/* Altura do header ~= 64px ⇒ pt-16 */}
         <main className="pt-8 pb-10">
           <Routes>

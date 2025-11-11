@@ -1,62 +1,62 @@
 // src/components/MultiImagePlanner.tsx
 import React from "react";
-import { BatchPlan } from "@/lib/types";
+import type { BatchPlan } from "../lib/types";
 
 type Props = {
   value: BatchPlan;
-  onChange: (p: BatchPlan) => void;
+  onChange: (plan: BatchPlan) => void;
 };
 
-export default function MultiImagePlanner({ value, onChange }: Props) {
-  const setMode = (mode: BatchPlan["mode"]) => onChange({ ...value, mode });
-  const setCount = (count: number) => onChange({ ...value, count });
+const modes: { id: BatchPlan["mode"]; label: string }[] = [
+  { id: "single" as BatchPlan["mode"], label: "Single" },
+  { id: "carousel" as BatchPlan["mode"], label: "Carousel" },
+  // GRID removido do UI; se existir no tipo, continua válido internamente
+];
 
-  // saneamento leve
-  const safeCount =
-    value.mode === "single" ? 1 : Math.max(1, Math.min(10, value.count || 1));
+export default function MultiImagePlanner({ value, onChange }: Props) {
+  const handleModeChange = (mode: BatchPlan["mode"]) => {
+    onChange({ ...value, mode });
+  };
+
+  const handleCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const n = parseInt(e.target.value, 10);
+    if (Number.isNaN(n) || n <= 0) {
+      onChange({ ...value, count: 1 });
+    } else {
+      onChange({ ...value, count: n });
+    }
+  };
 
   return (
-    <div className="row" style={{ gap: 8 }}>
-      {/* modos */}
-      <div className="row" style={{ gap: 6 }}>
-        <button
-          className={`btn ${value.mode === "single" ? "btn--primary" : ""}`}
-          onClick={() => setMode("single")}
-          type="button"
-        >
-          Single
-        </button>
-        <button
-          className={`btn ${value.mode === "carousel" ? "btn--primary" : ""}`}
-          onClick={() => setMode("carousel")}
-          type="button"
-        >
-          Carousel
-        </button>
-        <button
-          className={`btn ${value.mode === "grid" ? "btn--primary" : ""}`}
-          onClick={() => setMode("grid")}
-          type="button"
-        >
-          Grid
-        </button>
+    <div className="flex flex-col gap-3 w-full">
+      <div className="row" style={{ gap: 8 }}>
+        {modes.map((m) => (
+          <button
+            key={m.id}
+            type="button"
+            className={
+              value.mode === m.id
+                ? "btn btn--primary"
+                : "btn"
+            }
+            onClick={() => handleModeChange(m.id)}
+          >
+            {m.label}
+          </button>
+        ))}
       </div>
 
-      {/* quantidade (quando aplica) */}
-      {value.mode !== "single" && (
-        <div className="row" style={{ gap: 6, alignItems: "center" }}>
-          <span className="chip">Qtd.</span>
-          <input
-            type="number"
-            min={1}
-            max={10}
-            value={safeCount}
-            onChange={(e) => setCount(parseInt(e.target.value || "1", 10))}
-            className="input"
-            style={{ width: 80 }}
-          />
-        </div>
-      )}
+      <div className="row" style={{ gap: 8, alignItems: "center" }}>
+        <span style={{ fontSize: 13, opacity: 0.8 }}>Qtd.</span>
+        <input
+          type="number"
+          min={1}
+          className="input"
+          style={{ maxWidth: 80 }}
+          value={value.count}
+          onChange={handleCountChange}
+        />
+      </div>
     </div>
   );
 }

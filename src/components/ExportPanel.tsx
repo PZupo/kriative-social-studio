@@ -70,7 +70,11 @@ export default function ExportPanel({ preset, idea, text, styleKey, plan, seeds 
     setBusy(true);
     try {
       let JSZip: any;
-      try { JSZip = (await import("jszip")).default; } catch { JSZip = null; }
+      try {
+        JSZip = (await import("jszip")).default;
+      } catch {
+        JSZip = null;
+      }
 
       const canvases = collectCanvases();
       if (!canvases.length) {
@@ -79,7 +83,7 @@ export default function ExportPanel({ preset, idea, text, styleKey, plan, seeds 
         return;
       }
 
-      // ✅ garante que todo texto foi pintado no canvas
+      // garante que todo texto (se houver) foi pintado no canvas
       for (const c of canvases) {
         await ensureCommitted(c.canvasId);
       }
@@ -122,10 +126,23 @@ export default function ExportPanel({ preset, idea, text, styleKey, plan, seeds 
         });
       }
 
-      const meta = { preset, styleKey, idea, text, plan, seeds, count: canvases.length, exportedAt: new Date().toISOString() };
+      const meta = {
+        preset,
+        styleKey,
+        idea,
+        text,
+        plan,
+        seeds,
+        count: canvases.length,
+        exportedAt: new Date().toISOString(),
+      };
       root.file("metadata.json", JSON.stringify(meta, null, 2), { binary: false });
 
-      const html = buildPreviewHtml({ title: `${preset?.name || "Export"} • ${styleKey}`, folderName, files });
+      const html = buildPreviewHtml({
+        title: `${preset?.name || "Export"} • ${styleKey}`,
+        folderName,
+        files,
+      });
       root.file("index.html", html, { binary: false });
 
       const blob = await zip.generateAsync({ type: "blob" });
@@ -140,7 +157,15 @@ export default function ExportPanel({ preset, idea, text, styleKey, plan, seeds 
   };
 
   const handleCopyMetadata = async () => {
-    const meta = { preset, styleKey, idea, text, plan, seeds, exportedAt: new Date().toISOString() };
+    const meta = {
+      preset,
+      styleKey,
+      idea,
+      text,
+      plan,
+      seeds,
+      exportedAt: new Date().toISOString(),
+    };
     try {
       await navigator.clipboard.writeText(JSON.stringify(meta, null, 2));
       showBanner("✅ Metadados copiados");
@@ -163,15 +188,38 @@ export default function ExportPanel({ preset, idea, text, styleKey, plan, seeds 
       </div>
 
       <div className="row" style={{ marginTop: 10 }}>
-        <button className="btn btn--primary" onClick={handleZipAll} disabled={busy || !seeds.length}>
-          {busy ? "Gerando ZIP…" : "⬇ Baixar tudo (.zip) — PNG+JPEG+Preview"}
+        <button
+          className="btn btn--primary"
+          onClick={handleZipAll}
+          disabled={busy || !seeds.length}
+          style={{
+            whiteSpace: "normal",
+            lineHeight: 1.2,
+            padding: "10px 16px",
+            textAlign: "center",
+          }}
+        >
+          {busy ? (
+            "Gerando ZIP…"
+          ) : (
+            <>
+              ⬇ Baixar tudo (.zip)
+              <br />
+              PNG + JPEG + Preview
+            </>
+          )}
         </button>
+
         <button className="btn" onClick={handleCopyMetadata}>
-          {} Copiar metadados (JSON)
+          Copiar metadados (JSON)
         </button>
       </div>
 
-      {!seeds.length && <p style={{ opacity: 0.7, marginTop: 8 }}>Dica: gere imagens primeiro para habilitar o ZIP.</p>}
+      {!seeds.length && (
+        <p style={{ opacity: 0.7, marginTop: 8 }}>
+          Dica: gere imagens primeiro para habilitar o ZIP.
+        </p>
+      )}
     </section>
   );
 }
@@ -181,34 +229,46 @@ export default function ExportPanel({ preset, idea, text, styleKey, plan, seeds 
 function escapeHtml(s: string) {
   return s.replace(/[&<>"']/g, (m) => {
     switch (m) {
-      case "&": return "&amp;";
-      case "<": return "&lt;";
-      case ">": return "&gt;";
-      case '"': return "&quot;";
-      case "'": return "&#039;";
-      default: return m;
+      case "&":
+        return "&amp;";
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case '"':
+        return "&quot;";
+      case "'":
+        return "&#039;";
+      default:
+        return m;
     }
   });
 }
 
 async function makeThumb(srcCanvas: HTMLCanvasElement, targetW = 360): Promise<string> {
   const ratio = srcCanvas.height / srcCanvas.width;
-  const w = targetW, h = Math.round(targetW * ratio);
+  const w = targetW,
+    h = Math.round(targetW * ratio);
   const c = document.createElement("canvas");
-  c.width = w; c.height = h;
+  c.width = w;
+  c.height = h;
   const ctx = c.getContext("2d")!;
   ctx.drawImage(srcCanvas, 0, 0, w, h);
   return c.toDataURL("image/png");
 }
 
 function buildPreviewHtml({
-  title, folderName, files,
+  title,
+  folderName,
+  files,
 }: {
   title: string;
   folderName: string;
   files: { png: string; jpg: string; seed: number; nameBase: string }[];
 }) {
-  const items = files.map(f => `
+  const items = files
+    .map(
+      (f) => `
     <article class="card">
       <a href="${escapeAttr(f.png)}" target="_blank" rel="noopener">
         <img src="./thumbs/${escapeAttr(f.nameBase)}.png" alt="${escapeAttr(f.nameBase)}" />
@@ -221,7 +281,8 @@ function buildPreviewHtml({
         </div>
       </div>
     </article>`
-  ).join("\n");
+    )
+    .join("\n");
 
   return `<!doctype html>
 <html lang="en">
@@ -245,20 +306,29 @@ footer{max-width:1100px;margin:0 auto;padding:20px 16px;font-size:12px;opacity:.
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>${escapeHtml(title)}</h1><div class="muted">${escapeHtml(folderName)}/</div></div></header>
+<header><div class="wrap"><h1>${escapeHtml(title)}</h1><div class="muted">${escapeHtml(
+    folderName
+  )}/</div></div></header>
 <main><div class="grid">${items}</div></main>
 <footer>Gerado pelo Kriative Social Studio — export ZIP com preview.</footer>
 </body></html>`;
 }
+
 function escapeAttr(s: string) {
   return s.replace(/["'<>&]/g, (m) => {
     switch (m) {
-      case "&": return "&amp;";
-      case "<": return "&lt;";
-      case ">": return "&gt;";
-      case '"': return "&quot;";
-      case "'": return "&#39;";
-      default: return m;
+      case "&":
+        return "&amp;";
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case '"':
+        return "&quot;";
+      case "'":
+        return "&#39;";
+      default:
+        return m;
     }
   });
 }
