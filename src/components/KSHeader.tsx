@@ -1,17 +1,32 @@
 // src/components/KSHeader.tsx
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
+import LanguageSelector from "./LanguageSelector";
+import UserProfileMenu from "./UserProfileMenu";
+import { useCredits } from "../lib/credits";
 
 export type KSTab = { to: string; label: string };
 
 type Props = {
   appName: string;
   subtitle?: string;
-  tabs: KSTab[];
+  tabs?: KSTab[];
+  showLanguage?: boolean;
+  showThemeToggle?: boolean;
+  onOpenPlans?: () => void; // abre modal de planos
 };
 
-export default function KSHeader({ appName, subtitle, tabs }: Props) {
+export default function KSHeader({
+  appName,
+  subtitle,
+  tabs,
+  showLanguage = true,
+  showThemeToggle = true,
+  onOpenPlans,
+}: Props) {
   const [open, setOpen] = useState(false);
+  const { credits } = useCredits();
 
   return (
     <header className="sticky top-0 z-50 bg-gradient-to-r from-teal-500 via-emerald-400 to-orange-500">
@@ -20,39 +35,65 @@ export default function KSHeader({ appName, subtitle, tabs }: Props) {
           className="
             flex items-center justify-between
             rounded-2xl px-3 md:px-4 py-2 md:py-3
-            bg-white/80 dark:bg-[#0b0f19]/80
+            bg-slate-950/90
             backdrop-blur
-            border border-white/30 dark:border-white/10
+            border border-white/15
             shadow-sm
           "
         >
           {/* Brand */}
-          {/* Brand */}
-<Link to="/" className="flex items-center gap-3 group" aria-label="Home">
-  <KSLogo />
-  <div className="leading-tight">
-    <div className="font-extrabold tracking-tight text-gray-900 dark:text-white drop-shadow-sm">
-      {appName}
-    </div>
-    {subtitle ? (
-      <div className="text-xs text-gray-700 dark:text-gray-200 opacity-90">
-        {subtitle}
-      </div>
-    ) : null}
-  </div>
-</Link>
+          <Link
+            to="/editor"
+            className="flex items-center gap-3 group"
+            aria-label="Home"
+          >
+            <KSLogo />
+            <div className="leading-tight">
+              <div className="font-extrabold tracking-tight text-white text-base sm:text-lg">
+                {appName}
+              </div>
+              {subtitle ? (
+                <div className="text-[11px] sm:text-xs text-slate-200/80">
+                  {subtitle}
+                </div>
+              ) : null}
+            </div>
+          </Link>
 
-
-          {/* Desktop nav */}
+          {/* Navegação desktop */}
           <nav className="hidden md:flex items-center gap-2">
-            {tabs.map((t) => (
+            {tabs?.map((t) => (
               <HeaderTab key={t.to} to={t.to} label={t.label} />
             ))}
           </nav>
 
-          {/* Mobile trigger */}
+          {/* Ações (desktop) */}
+          <div className="hidden md:flex items-center gap-2">
+            {/* Créditos compactos */}
+            <div className="hidden sm:flex items-center rounded-full border border-emerald-400/60 bg-emerald-500/10 px-3 py-1 text-[11px] text-emerald-100">
+              <span className="mr-1 opacity-80">Créditos</span>
+              <span className="font-semibold">{credits}</span>
+            </div>
+
+            {/* Botão Planos */}
+            {onOpenPlans && (
+              <button
+                type="button"
+                onClick={onOpenPlans}
+                className="text-xs font-semibold rounded-full px-3 py-1.5 bg-emerald-500 text-white hover:bg-emerald-400 transition"
+              >
+                Planos
+              </button>
+            )}
+
+            {showLanguage && <LanguageSelector />}
+            {showThemeToggle && <ThemeToggle />}
+            <UserProfileMenu />
+          </div>
+
+          {/* Trigger mobile */}
           <button
-            className="md:hidden btn-ghost px-3 py-2 rounded-xl ring-1 ring-black/5 dark:ring-white/10"
+            className="md:hidden px-3 py-2 rounded-xl border border-white/15 text-slate-50"
             onClick={() => setOpen((v) => !v)}
             aria-label="Abrir menu"
             aria-expanded={open}
@@ -63,11 +104,11 @@ export default function KSHeader({ appName, subtitle, tabs }: Props) {
           </button>
         </div>
 
-        {/* Mobile drawer */}
+        {/* Drawer mobile */}
         {open && (
-          <div className="md:hidden mt-2 rounded-2xl bg-white/90 dark:bg-[#0b0f19]/90 backdrop-blur border border-white/30 dark:border-white/10 shadow-sm">
+          <div className="md:hidden mt-2 rounded-2xl bg-slate-950/95 backdrop-blur border border-white/15 shadow-sm">
             <div className="px-3 py-3 flex flex-col gap-2">
-              {tabs.map((t) => (
+              {tabs?.map((t) => (
                 <HeaderTabMobile
                   key={t.to}
                   to={t.to}
@@ -75,6 +116,35 @@ export default function KSHeader({ appName, subtitle, tabs }: Props) {
                   onClick={() => setOpen(false)}
                 />
               ))}
+
+              <div className="mt-2 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  {showLanguage && <LanguageSelector />}
+                  {showThemeToggle && <ThemeToggle />}
+                </div>
+                <UserProfileMenu />
+              </div>
+
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-[11px] text-slate-200/80">
+                  Créditos:{" "}
+                  <span className="font-semibold text-emerald-300">
+                    {credits}
+                  </span>
+                </span>
+                {onOpenPlans && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      onOpenPlans();
+                    }}
+                    className="text-[11px] font-semibold rounded-full px-3 py-1 bg-emerald-500 text-white"
+                  >
+                    Ver planos
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -89,10 +159,10 @@ function HeaderTab({ to, label }: { to: string; label: string }) {
       to={to}
       className={({ isActive }) =>
         [
-          "relative px-3 py-2 rounded-xl transition",
+          "relative px-3 py-2 rounded-xl text-sm transition",
           isActive
             ? "text-white bg-gradient-to-r from-teal-500 to-orange-500 shadow-sm"
-            : "text-gray-800 dark:text-gray-100 hover:bg-black/5 dark:hover:bg-white/10",
+            : "text-slate-100 hover:bg-white/5",
         ].join(" ")
       }
     >
@@ -116,10 +186,10 @@ function HeaderTabMobile({
       onClick={onClick}
       className={({ isActive }) =>
         [
-          "w-full text-left px-3 py-2 rounded-xl transition",
+          "w-full text-left px-3 py-2 rounded-xl text-sm transition",
           isActive
             ? "text-white bg-gradient-to-r from-teal-500 to-orange-500"
-            : "hover:bg-black/5 dark:hover:bg-white/10",
+            : "text-slate-100 hover:bg-white/5",
         ].join(" ")
       }
     >
@@ -141,7 +211,14 @@ function KSLogo() {
           <stop offset="100%" stopColor="#f97316" />
         </linearGradient>
       </defs>
-      <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#ks-teal-orange)" />
+      <rect
+        x="0"
+        y="0"
+        width="32"
+        height="32"
+        rx="8"
+        fill="url(#ks-teal-orange)"
+      />
       <path
         d="M9 7h3v8l6-8h4l-6 8 7 10h-4l-7-10v10H9V7z"
         fill="white"

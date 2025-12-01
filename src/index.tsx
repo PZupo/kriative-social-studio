@@ -2,10 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
-import "./i18n/i18n"; // <- ADICIONE ESTA LINHA ANTES DE RENDERIZAR
+import { CreditsProvider } from "./lib/credits";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <CreditsProvider>
+      <App />
+    </CreditsProvider>
   </React.StrictMode>
 );
