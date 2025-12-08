@@ -1,10 +1,10 @@
-// src/pages/Login.tsx - COM DEBUG
+// src/pages/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/login.css';
 
-export default function Login(): JSX.Element {
+export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     email: '',
@@ -19,14 +19,14 @@ export default function Login(): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const from = (location.state as any)?.from || '/';
+  const from = location.state?.from || '/';
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError('');
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -34,13 +34,9 @@ export default function Login(): JSX.Element {
     try {
       if (isLogin) {
         // Login
-        console.log('Tentando login:', formData.email);
         await login(formData.email, formData.password);
-        console.log('Login bem-sucedido!');
       } else {
         // Cadastro
-        console.log('Tentando cadastro:', formData.email);
-        
         if (formData.password !== formData.confirmPassword) {
           setError('As senhas não coincidem');
           setLoading(false);
@@ -51,39 +47,18 @@ export default function Login(): JSX.Element {
           setLoading(false);
           return;
         }
-        if (!formData.displayName.trim()) {
-          setError('Nome é obrigatório');
-          setLoading(false);
-          return;
-        }
-        
         await signup(formData.email, formData.password, formData.displayName);
-        console.log('Cadastro bem-sucedido!');
       }
       navigate(from);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Erro de autenticação:', err);
-      console.error('Código do erro:', err.code);
-      console.error('Mensagem:', err.message);
-      
-      // Mensagens de erro mais detalhadas
-      let errorMessage = 'Erro ao processar. Tente novamente.';
-      
-      if (err.code === 'auth/user-not-found') {
-        errorMessage = 'Usuário não encontrado';
-      } else if (err.code === 'auth/wrong-password') {
-        errorMessage = 'Senha incorreta';
-      } else if (err.code === 'auth/email-already-in-use') {
-        errorMessage = 'Este email já está cadastrado';
-      } else if (err.code === 'auth/invalid-email') {
-        errorMessage = 'Email inválido';
-      } else if (err.code === 'auth/weak-password') {
-        errorMessage = 'Senha muito fraca';
-      } else if (err.message) {
-        errorMessage = `Erro: ${err.message}`;
-      }
-      
-      setError(errorMessage);
+      setError(
+        err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password'
+          ? 'Email ou senha incorretos'
+          : err.code === 'auth/email-already-in-use'
+          ? 'Este email já está cadastrado'
+          : 'Erro ao processar. Tente novamente.'
+      );
     } finally {
       setLoading(false);
     }
@@ -93,15 +68,11 @@ export default function Login(): JSX.Element {
     setError('');
     setLoading(true);
     try {
-      console.log('Tentando login com Google...');
       await loginWithGoogle();
-      console.log('Login com Google bem-sucedido!');
       navigate(from);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Erro no login com Google:', err);
-      console.error('Código:', err.code);
-      console.error('Mensagem:', err.message);
-      setError(`Erro ao fazer login com Google: ${err.message}`);
+      setError('Erro ao fazer login com Google. Tente novamente.');
     } finally {
       setLoading(false);
     }

@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "afiliattuz-ecosystem"
+  },
+  "targets": {
+    "afiliattuz-ecosystem": {
+      "hosting": {
+        "social-studio": [
+          "kriative-social-studio"
+        ],
+        "[target-name]": [
+          "[site-name]"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

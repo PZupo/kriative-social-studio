@@ -1,5 +1,5 @@
-// src/App.tsx
-import React, { useState } from "react";
+// src/App.tsx - VERSÃO LIMPA SEM SISTEMA ANTIGO
+import React from "react";
 import {
   BrowserRouter,
   Routes,
@@ -16,43 +16,14 @@ import Dashboard from "./pages/Dashboard";
 import Editor from "./pages/Editor";
 import Library from "./pages/Library";
 import Login from "./pages/Login";
+import Pricing from "./pages/Pricing";
 
-import KSPlansModal from "./components/billing/KSPlansModal";
-import KSCheckoutModal from "./components/billing/KSCheckoutModal";
-import type { KSPlanId } from "./lib/billing/plans";
-import { useCredits } from "./lib/credits";
+import { AuthProvider } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import RequirePlan from "./components/RequirePlan";
 
 function AppShell() {
-  const { setCredits } = useCredits();
-
-  const [plansOpen, setPlansOpen] = useState(false);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<KSPlanId | null>(null);
-
-  // Créditos por plano (mesma regra dos outros apps)
-  function getCreditsForPlan(planId: KSPlanId): number {
-    if (planId.startsWith("ind_pro_")) return 120;        // PRO
-    if (planId.startsWith("ind_studio_")) return 360;     // STUDIO
-    if (planId.startsWith("ind_exclusive_")) return 1200; // EXCLUSIVE
-    return 0;
-  }
-
-  function handleConfirmCheckout(planId: KSPlanId) {
-    const newCredits = getCreditsForPlan(planId);
-
-    if (newCredits > 0) {
-      setCredits(newCredits);
-      alert(
-        `Mock de checkout para o plano: ${planId}\nCréditos ajustados para ${newCredits}.`
-      );
-    } else {
-      alert(`Mock de checkout para o plano: ${planId}`);
-    }
-
-    setCheckoutOpen(false);
-  }
-
-  // 👉 Tabs enxutas (Biblioteca só via CTA da tela, não no header)
+  // Tabs do header
   const tabs: KSTab[] = [
     { to: "/editor", label: "Criação" },
     { to: "/dashboard", label: "Dashboard" },
@@ -64,17 +35,60 @@ function AppShell() {
         appName="Kriative Social Studio"
         subtitle="Criação de Posts e Carrosséis com IA"
         tabs={tabs}
-        onOpenPlans={() => setPlansOpen(true)}
+        // ← REMOVI onOpenPlans - agora vai direto pra /pricing
+        onOpenPlans={() => window.location.href = '/pricing'}
       />
 
-      {/* NENHUM outro header aqui ─ só conteúdo */}
       <main className="pt-8 pb-10">
         <Routes>
-          <Route path="/" element={<Navigate to="/editor" replace />} />
-          <Route path="/editor" element={<Editor />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/library" element={<Library />} />
+          {/* ========== ROTAS PÚBLICAS ========== */}
           <Route path="/login" element={<Login />} />
+          <Route path="/pricing" element={<Pricing />} />
+
+          {/* ========== ROTAS PROTEGIDAS ========== */}
+          <Route 
+            path="/" 
+            element={
+              <ProtectedRoute>
+                <Navigate to="/editor" replace />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/editor" 
+            element={
+              <ProtectedRoute>
+                <RequirePlan>
+                  <Editor />
+                </RequirePlan>
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <RequirePlan>
+                  <Dashboard />
+                </RequirePlan>
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/library" 
+            element={
+              <ProtectedRoute>
+                <RequirePlan>
+                  <Library />
+                </RequirePlan>
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* Rota não encontrada */}
           <Route path="*" element={<Navigate to="/editor" replace />} />
         </Routes>
       </main>
@@ -85,23 +99,7 @@ function AppShell() {
 
       <FeedbackBox />
 
-      {/* Modais de planos / checkout */}
-      <KSPlansModal
-        open={plansOpen}
-        onClose={() => setPlansOpen(false)}
-        onSelectPlan={(planId) => {
-          setSelectedPlan(planId);
-          setPlansOpen(false);
-          setCheckoutOpen(true);
-        }}
-      />
-
-      <KSCheckoutModal
-        open={checkoutOpen}
-        planId={selectedPlan}
-        onClose={() => setCheckoutOpen(false)}
-        onConfirm={handleConfirmCheckout}
-      />
+      {/* ← REMOVI todos os modais antigos (KSPlansModal, KSCheckoutModal) */}
     </div>
   );
 }
@@ -109,7 +107,9 @@ function AppShell() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppShell />
+      <AuthProvider>
+        <AppShell />
+      </AuthProvider>
     </BrowserRouter>
   );
 }
