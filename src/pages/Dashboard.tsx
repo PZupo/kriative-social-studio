@@ -1,200 +1,81 @@
-// src/pages/Dashboard.tsx
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-
-import ThemeToggle from "../components/ThemeToggle";
-import UserProfileMenu from "../components/UserProfileMenu";
-
-import KSPlansModal from "../components/billing/KSPlansModal";
-import KSCheckoutModal from "../components/billing/KSCheckoutModal";
-import type { KSPlanId } from "../lib/billing/plans";
+import { useAuth } from "../contexts/AuthContext";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { userData, user, loading } = useAuth();
+  
+  // O HUB controla o Tier. O Satélite apenas exibe.
+  const planName = userData?.tier || "Plano Free";
+  const credits = userData?.credits ?? 0;
 
-  // === KS BILLING CORE — estado dos modais ===
-const [plansOpen, setPlansOpen] = useState(false);
-const [checkoutOpen, setCheckoutOpen] = useState(false);
-const [selectedPlan, setSelectedPlan] = useState<KSPlanId | null>(null);
+  const handleGoToHub = (path: string) => { 
+    window.location.href = `https://afiliattuz.mydigitaldropp.com/${path}`; 
+  };
 
-const handleOpenPlans = () => {
-  setPlansOpen(true);
-  setCheckoutOpen(false);
-  setSelectedPlan(null);
-};
-
-const handleSelectPlan = (planId: KSPlanId) => {
-  setSelectedPlan(planId);
-  setPlansOpen(false);
-  setCheckoutOpen(true);
-};
-
-const handleCloseCheckout = () => {
-  setCheckoutOpen(false);
-};
-
-const handleConfirmCheckout = (planId: KSPlanId) => {
-  // FUTURO: aqui entra Stripe / link real
-  console.log("[Social Studio] Confirmar plano:", planId);
-  alert(`Mock de checkout para o plano: ${planId}`);
-};
-
-
-  // === NAVEGAÇÃO SIMPLES ENTRE TELAS DO APP ===
-  const goToEditor = () => navigate("/editor");
-  const goToLibrary = () => navigate("/library");
+  if (loading) return null;
 
   return (
-    <>
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900 text-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[#020305] text-slate-50 flex flex-col font-sans">
+      <main className="flex-1 w-full max-w-6xl mx-auto px-6 py-8 space-y-8">
         
-        {/* CONTEÚDO */}
-        <main className="flex-1 w-full max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-6">
-          {/* BLOCO HERO */}
-          <section className="grid gap-4 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] items-start">
-            <div className="space-y-3">
-              <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                Organize, crie e publique seus conteúdos em um só lugar.
-              </h1>
-              <p className="text-sm md:text-base text-slate-300">
-                Use o Kriative Social Studio para centralizar ideias, organizar
-                roteiros, gerar artes e manter um fluxo constante de postagens
-                com a sua identidade visual.
-              </p>
+        {/* Header de Boas-vindas */}
+        <section className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div>
+            <h1 className="text-3xl font-black tracking-tight">
+              Olá, {userData?.displayName || "Criador"}
+            </h1>
+            <p className="text-slate-400 mt-1">Sua central de geração de conteúdo IA.</p>
+          </div>
 
-              <div className="flex flex-wrap gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={goToEditor}
-                  className="inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-semibold bg-teal-400 text-slate-950 hover:opacity-90 transition"
-                >
-                  Abrir editor
-                </button>
-                <button
-                  type="button"
-                  onClick={goToLibrary}
-                  className="inline-flex items-center justify-center rounded-2xl px-4 py-2 text-xs font-semibold border border-white/20 bg-white/5 hover:bg-white/10 transition"
-                >
-                  Ver biblioteca
-                </button>
-                <button
-  type="button"
-  onClick={handleOpenPlans}
-  className="px-4 py-1.5 rounded-full border border-white/40 text-xs font-semibold hover:bg-white/10 transition"
->
-  Planos
-</button>
-
-
-              </div>
-            </div>
-
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-4 md:p-5 space-y-3">
-              <h2 className="text-sm font-semibold">
-                Seu status no ecossistema Kriative
-              </h2>
-              <p className="text-[13px] text-slate-300">
-                Aqui você poderá acompanhar limites de criação, status de plano
-                e atalhos para upgrade. Por enquanto, as informações de uso e
-                créditos ainda estão em modo mock.
-              </p>
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                <div className="rounded-2xl bg-black/30 border border-white/10 px-3 py-2">
-                  <div className="text-[11px] text-slate-400">Criações</div>
-                  <div className="text-sm font-semibold">Ilimitadas*</div>
-                  <div className="text-[10px] text-slate-500">
-                    Limites reais serão aplicados com Stripe + Supabase.
-                  </div>
-                </div>
-                <div className="rounded-2xl bg-black/30 border border-white/10 px-3 py-2">
-                  <div className="text-[11px] text-slate-400">Plano atual</div>
-                  <div className="text-sm font-semibold">Mock / Dev</div>
-                  <div className="text-[10px] text-slate-500">
-                    Clique em &quot;Upgrade de plano&quot; para testar o fluxo.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* CARDS DE ATALHO */}
-          <section className="grid gap-4 md:grid-cols-3">
-            <button
-              type="button"
-              onClick={goToEditor}
-              className="group rounded-3xl border border-white/10 bg-white/5 p-4 text-left hover:bg-white/10 hover:-translate-y-1 transition transform"
-            >
-              <div className="text-xs font-semibold text-teal-300">
-                Criação
-              </div>
-              <div className="mt-1 text-sm font-semibold">
-                Abrir estúdio de edição
-              </div>
-              <p className="mt-1 text-[13px] text-slate-300">
-                Monte artes, textos e posts com a identidade visual da sua
-                marca.
-              </p>
-              <div className="mt-3 text-[11px] text-slate-400">
-                Atalho direto para a página de edição.
-              </div>
+          <div className="flex gap-3">
+            <button onClick={() => navigate("/editor")} className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-purple-500/20">
+              Novo Projeto
             </button>
-
-            <button
-              type="button"
-              onClick={goToLibrary}
-              className="group rounded-3xl border border-white/10 bg-white/5 p-4 text-left hover:bg-white/10 hover:-translate-y-1 transition transform"
-            >
-              <div className="text-xs font-semibold text-sky-300">
-                Organização
-              </div>
-              <div className="mt-1 text-sm font-semibold">
-                Biblioteca de criações
-              </div>
-              <p className="mt-1 text-[13px] text-slate-300">
-                Veja, duplique e reutilize posts salvos em seu Social Studio.
-              </p>
-              <div className="mt-3 text-[11px] text-slate-400">
-                Ideal para manter consistência de campanhas.
-              </div>
+            <button onClick={() => navigate("/library")} className="bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-2.5 rounded-xl font-bold text-sm transition-all">
+              Minha Galeria
             </button>
+          </div>
+        </section>
 
-            <button
-              type="button"
-onClick={handleOpenPlans}
-              className="group rounded-3xl border border-amber-500/40 bg-amber-500/10 p-4 text-left hover:bg-amber-500/20 hover:-translate-y-1 transition transform"
-            >
-              <div className="text-xs font-semibold text-amber-300">
-                Planos & Billing
-              </div>
-              <div className="mt-1 text-sm font-semibold">
-                Ver detalhes de planos
-              </div>
-              <p className="mt-1 text-[13px] text-amber-100/90">
-                Veja condições, benefícios e prepare-se para a ativação real do
-                Stripe.
-              </p>
-              <div className="mt-3 text-[11px] text-amber-100/80">
-                Por enquanto, essa área pode ser usada como vitrine de planos.
-              </div>
+        {/* Cards de Status (Dados vindos do HUB) */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-[#0B0F19] border border-white/5 p-6 rounded-3xl">
+            <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Créditos Disponíveis</p>
+            <p className="text-4xl font-black mt-2 text-white">{credits}</p>
+          </div>
+
+          <div className="bg-[#0B0F19] border border-white/5 p-6 rounded-3xl">
+            <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Assinatura Atual</p>
+            <p className="text-2xl font-black mt-2 text-purple-400">{planName}</p>
+          </div>
+
+          <div className="bg-[#0B0F19] border border-white/5 p-6 rounded-3xl flex flex-col justify-between">
+            <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Gestão de Conta</p>
+            <button onClick={() => handleGoToHub("billing")} className="text-xs font-bold text-white underline decoration-purple-500 underline-offset-4 hover:text-purple-400 transition-all mt-4 text-left">
+              Faturamento e Planos no HUB →
             </button>
-          </section>
-        </main>
-      </div>
+          </div>
+        </section>
 
-      {/* === MODAIS KS BILLING CORE === */}
-      <KSPlansModal
-        open={plansOpen}
-        onClose={() => setPlansOpen(false)}
-        onSelectPlan={handleSelectPlan}
-      />
+        {/* Atalhos Rápidos */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div onClick={() => navigate("/editor")} className="cursor-pointer bg-gradient-to-br from-purple-600/10 to-transparent border border-purple-500/20 p-8 rounded-3xl hover:border-purple-500/40 transition-all group">
+            <h3 className="text-xl font-bold mb-2 group-hover:text-purple-400">Editor Studio</h3>
+            <p className="text-sm text-slate-400">Crie posts, legendas e criativos com inteligência artificial.</p>
+          </div>
+          <div onClick={() => handleGoToHub("profile")} className="cursor-pointer bg-white/5 border border-white/10 p-8 rounded-3xl hover:bg-white/10 transition-all">
+            <h3 className="text-xl font-bold mb-2">Configurações</h3>
+            <p className="text-sm text-slate-400">Gerencie seu perfil e preferências de conta diretamente no HUB.</p>
+          </div>
+        </section>
 
-      <KSCheckoutModal
-        open={checkoutOpen}
-        planId={selectedPlan}
-        onClose={handleCloseCheckout}
-        onConfirm={handleConfirmCheckout}
-      />
-    </>
+      </main>
+      <footer className="py-10 text-center text-[10px] text-slate-600 uppercase tracking-[0.2em]">
+        ID de Acesso: {user?.uid}
+      </footer>
+    </div>
   );
 };
 

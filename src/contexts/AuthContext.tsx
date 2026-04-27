@@ -1,115 +1,84 @@
-// src/contexts/AuthContext.tsx
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { 
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut as firebaseSignOut,
-  onAuthStateChanged,
-  GoogleAuthProvider,
-  signInWithPopup,
+  getAuth, 
+  onAuthStateChanged, 
   User,
-  UserCredential
-} from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../lib/firebase';
+  signInWithCustomToken,
+  signOut as firebaseSignOut,
+  setPersistence,
+  browserLocalPersistence
+} from "firebase/auth";
+import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+import { app } from "../lib/firebase"; 
+
+interface UserData {
+  tier?: string;
+  activeApps?: string[];
+  [key: string]: any;
+}
 
 interface AuthContextType {
-  currentUser: User | null;
-  userPlan: string;
-  signup: (email: string, password: string, displayName: string) => Promise<UserCredential>;
-  login: (email: string, password: string) => Promise<UserCredential>;
-  loginWithGoogle: () => Promise<UserCredential>;
-  signOut: () => Promise<void>;
+  user: User | null;
+  userData: UserData | null;
+  loading: boolean;
+  signInWithToken: (token: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+export const useAuth = () => useContext(AuthContext);
 
-export function useAuth(): AuthContextType {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-  return context;
-}
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-export function AuthProvider({ children }: AuthProviderProps) {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [userPlan, setUserPlan] = useState<string>('free');
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-  async function signup(email: string, password: string, displayName: string): Promise<UserCredential> {
-    const result = await createUserWithEmailAndPassword(auth, email, password);
-    
-    await setDoc(doc(db, 'users', result.user.uid), {
-      email: email,
-      displayName: displayName,
-      createdAt: new Date(),
-      plan: 'free',
-      usage: { generate_image: 0 }
-    });
-
-    return result;
-  }
-
-  function login(email: string, password: string): Promise<UserCredential> {
-    return signInWithEmailAndPassword(auth, email, password);
-  }
-
-  async function loginWithGoogle(): Promise<UserCredential> {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    
-    const userDoc = await getDoc(doc(db, 'users', result.user.uid));
-    
-    if (!userDoc.exists()) {
-      await setDoc(doc(db, 'users', result.user.uid), {
-        email: result.user.email,
-        displayName: result.user.displayName,
-        photoURL: result.user.photoURL,
-        createdAt: new Date(),
-        plan: 'free',
-        usage: { generate_image: 0 }
-      });
-    }
-
-    return result;
-  }
-
-  function signOut(): Promise<void> {
-    return firebaseSignOut(auth);
-  }
-
+  // Essencial para o satélite manter a conexão que o HUB iniciou
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
-      
-      if (user) {
-        const tokenResult = await user.getIdTokenResult();
-        setUserPlan((tokenResult.claims.plan as string) || 'free');
-      }
-      
-      setLoading(false);
-    });
+    setPersistence(auth, browserLocalPersistence);
+  }, [auth]);
 
-    return unsubscribe;
-  }, []);
-
-  const value: AuthContextType = {
-    currentUser,
-    userPlan,
-    signup,
-    login,
-    loginWithGoogle,
-    signOut
+  const signInWithToken = async (token: string) => {
+    try {
+      setLoading(true);
+      await signInWithCustomToken(auth, token);
+    } catch (error) {
+      console.error("Erro no SSO do Satélite:", error);
+      throw error;
+    }
   };
 
+  const logout = async () => {
+    await firebaseSignOut(auth);
+    setUserData(null);
+    window.location.href = "https://afiliattuz.mydigitaldropp.com"; // Volta pro HUB
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        // O Satélite apenas ESCUTA o Firestore que o HUB gerencia
+        const userRef = doc(db, "users", currentUser.uid);
+        const unsubData = onSnapshot(userRef, (docSnap) => {
+          if (docSnap.exists()) {
+            setUserData(docSnap.data() as UserData);
+          }
+          setLoading(false);
+        });
+        return () => unsubData();
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, [auth, db]);
+
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ user, userData, loading, signInWithToken, logout }}>
       {!loading && children}
     </AuthContext.Provider>
   );
-}
+};

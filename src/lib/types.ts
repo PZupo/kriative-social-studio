@@ -1,33 +1,67 @@
 // src/lib/types.ts
 
-/** 🎨 Estilos visuais suportados no app */
-export type KssStyle =
-  | "disney"
-  | "cyberpunk"
-  | "ghibli"
-  | "noir"
-  | "watercolor"   // novo
-  | "neon"         // novo
-  | "papercut";    // novo
+export interface UserData {
+  uid: string;
+  email: string;
+  displayName?: string;
+  photoURL?: string;
   
-export type Preset = { name: string; w: number; h: number };
+  // Dados do Ecossistema
+  credits?: number;
+  plan?: string;
+  tier?: string;
+  subscriptionStatus?: 'active' | 'inactive' | 'canceled' | 'past_due';
+  activeApps?: string[];
+  
+  // Billing
+  billing?: {
+    status: 'active' | 'inactive';
+    plan: string;
+    nextInvoice?: string;
+  };
+  // Compatibilidade
+  isActive?: boolean; 
+  hasActivePlan?: boolean;
+}
 
-export type Idea = {
-  topic: string;
-  audience: string;
-  goal: string;
-};
+// --- TIPOS AJUSTADOS PARA O SEU EDITOR ---
 
-export type TextBundle = {
-  title: string;
-  copy: string;
-  caption: string;
+// 1. KssStyle: Aceita string (para 'disney') OU objeto (para estilos complexos)
+export type KssStyle = string;
+export interface Preset {
+  id?: string;
+  name: string;
+  w?: number;
+  h?: number;
+  styleId?: string;
+  layout?: 'classic' | 'modern' | 'bold';
+}
+
+// 2. TextBundle: Inclui TODOS os campos que o Editor usa
+export interface TextBundle {
+  title?: string;     
+  headline?: string;  
+  copy?: string;      
+  body?: string;      
+  caption: string;    
   hashtags: string[];
-};
+}
 
-export type BatchPlan = {
-  mode: "carousel" | "grid" | "single";
+export interface Idea {
+  id?: string;
+  topic: string;
+  description?: string;
+  audience?: string; 
+  goal?: string;     
+  textBundle?: TextBundle;
+  createdAt?: string;
+}
+
+export interface BatchPlan {
+  id?: string;
+  date?: string;
+  mode?: string; 
   count: number;
-};
-
-
+  ideas?: Idea[];
+  status?: 'draft' | 'scheduled' | 'published';
+}

@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Função auxiliar para verificar autenticação
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Função para verificar se é o próprio usuário
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId);
+    }
+    
+    // Subscriptions collection
+    match /subscriptions/{subscriptionId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if false; // Apenas Cloud Functions podem escrever
+    }
+    
+    // App-specific data
+    match /apps/{appId}/userdata/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    // Affiliates
+    match /affiliates/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+  }
+}

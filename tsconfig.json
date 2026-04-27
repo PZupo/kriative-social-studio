@@ -11,14 +11,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-
-    /* ✅ Alias @ -> src */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
 
-    /* ✅ Tipos do Vite no editor/TS */
     "types": ["vite/client"]
   },
   "include": ["src", "vite.config.ts", "env.d.ts"]

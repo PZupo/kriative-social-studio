@@ -1,11 +1,13 @@
 // src/components/MyCreations.tsx
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Creation, listCreations, removeCreation } from "../lib/storage";
 import { useFeedback } from "@/hooks/useFeedback";
 
 const CHANGE_EVENT = "kss:creations:changed";
 
 export default function MyCreations() {
+  const { t } = useTranslation();
   const [items, setItems] = useState<Creation[]>([]);
   const { push } = useFeedback();
 
@@ -25,19 +27,14 @@ export default function MyCreations() {
   useEffect(() => {
     reload();
 
-    // escuta evento custom (seu fluxo já dispara isso)
     const onChanged = () => reload();
     window.addEventListener(CHANGE_EVENT, onChanged as EventListener);
 
-    // sincroniza se outra aba alterar o storage
     const onStorage = (e: StorageEvent) => {
-      // se você tiver uma chave específica, pode filtrar aqui:
-      // if (e.key !== 'kss:creations') return;
       reload();
     };
     window.addEventListener("storage", onStorage);
 
-    // ao voltar o foco na aba, revalida
     const onVisible = () => {
       if (document.visibilityState === "visible") reload();
     };
@@ -58,16 +55,16 @@ export default function MyCreations() {
     } catch {
       push({ kind: "error", message: "Falha ao excluir a criação." });
     } finally {
-      reload(); // reforça atualização imediata
+      reload();
     }
   };
 
   if (items.length === 0) {
     return (
       <section className="card" style={{ marginTop: 12 }}>
-        <h3 style={{ margin: 0 }}>Minhas Criações</h3>
+        <h3 style={{ margin: 0 }}>{t('my_creations_title')}</h3>
         <p style={{ opacity: 0.7, marginTop: 6 }}>
-          Nada salvo ainda. Gere uma imagem e clique em <em>Salvar</em> no cartão.
+          {t('no_saved_creations')}
         </p>
       </section>
     );
@@ -81,15 +78,16 @@ export default function MyCreations() {
   return (
     <section className="card" style={{ marginTop: 12 }}>
       <div className="row" style={{ justifyContent: "space-between" }}>
-        <h3 style={{ margin: 0 }}>Minhas Criações</h3>
+        <h3 style={{ margin: 0 }}>{t('my_creations_title')}</h3>
         <div className="row" role="toolbar" aria-label="Ações da galeria">
           <button className="btn" onClick={reload} aria-label="Recarregar lista">
-            ↻ Recarregar
+            ↻ {t('btn_regenerate') || "Recarregar"}
           </button>
         </div>
       </div>
 
-      <div className="grid" style={{ marginTop: 12 }}>
+      {/* Grid Layout Ajustado */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ marginTop: 12 }}>
         {items.map((it) => {
           const when =
             it && (it as any).createdAt
@@ -105,20 +103,20 @@ export default function MyCreations() {
                 {when}
               </div>
 
-              {/* thumb */}
-              <div className="frame" style={{ padding: 0, borderStyle: "solid" }}>
+              {/* thumb CORRIGIDA */}
+              <div className="frame" style={{ padding: 0, borderStyle: "solid", overflow: "hidden" }}>
                 <img
                   src={it.dataURL}
                   alt="Pré-visualização da criação"
                   style={{
                     width: "100%",
-                    height: 180,
-                    objectFit: "cover",
+                    height: "auto",      // ✅ CORREÇÃO: Altura automática para respeitar proporção
+                    objectFit: "contain", // ✅ CORREÇÃO: Garante que a imagem inteira apareça
                     display: "block",
                     background: "#0b0f19",
+                    minHeight: "150px"   // Mínimo para não ficar sumido se der erro
                   }}
                   onError={(e) => {
-                    // fallback básico: oculta a imagem quebrada
                     (e.currentTarget as HTMLImageElement).style.visibility = "hidden";
                   }}
                 />
@@ -132,7 +130,7 @@ export default function MyCreations() {
                   download={`${it.id}.png`}
                   aria-label="Baixar imagem"
                 >
-                  ⬇ Baixar
+                  ⬇ {t('btn_save') || "Baixar"}
                 </a>
                 <button
                   className="btn"
